@@ -19,6 +19,8 @@
 		5457349016823953006459B8 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5457348E16823953006459B8 /* MainStoryboard_iPhone.storyboard */; };
 		5457349316823953006459B8 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5457349116823953006459B8 /* MainStoryboard_iPad.storyboard */; };
 		5457349616823953006459B8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5457349516823953006459B8 /* ViewController.m */; };
+		54E69A0C168768DC0055425E /* icon_114.png in Resources */ = {isa = PBXBuildFile; fileRef = 54E69A0B168768DC0055425E /* icon_114.png */; };
+		54E69A0E168768DF0055425E /* icon_57.png in Resources */ = {isa = PBXBuildFile; fileRef = 54E69A0D168768DF0055425E /* icon_57.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +41,8 @@
 		5457349216823953006459B8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		5457349416823953006459B8 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		5457349516823953006459B8 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		54E69A0B168768DC0055425E /* icon_114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_114.png; sourceTree = "<group>"; };
+		54E69A0D168768DF0055425E /* icon_57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_57.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +62,8 @@
 		5457346716823953006459B8 = {
 			isa = PBXGroup;
 			children = (
+				54E69A0D168768DF0055425E /* icon_57.png */,
+				54E69A0B168768DC0055425E /* icon_114.png */,
 				5457347C16823953006459B8 /* junction11 */,
 				5457347516823953006459B8 /* Frameworks */,
 				5457347316823953006459B8 /* Products */,
@@ -167,6 +173,8 @@
 				5457348D16823953006459B8 /* Default-568h@2x.png in Resources */,
 				5457349016823953006459B8 /* MainStoryboard_iPhone.storyboard in Resources */,
 				5457349316823953006459B8 /* MainStoryboard_iPad.storyboard in Resources */,
+				54E69A0C168768DC0055425E /* icon_114.png in Resources */,
+				54E69A0E168768DF0055425E /* icon_57.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

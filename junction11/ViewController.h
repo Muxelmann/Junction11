@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OptionsViewController.h"
 
 @interface ViewController : UIViewController
 

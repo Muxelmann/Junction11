@@ -10,6 +10,8 @@
 
 @interface ViewController ()
 
+- (void)didReceiveMemoryWarning;
+
 @end
 
 @implementation ViewController
