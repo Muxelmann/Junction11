@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "OptionsViewController.h"
+#import "MainViewController.h"
 
 @interface ViewController : UIViewController
+
+- (BOOL)optionsWillAppear;
+- (BOOL)optionsWillDisappear;
 
 @end
