@@ -1,5 +1,5 @@
 //
-//  ShowViewController.h
+//  ShowMenuViewController.h
 //  junction11
 //
 //  Created by Maximilian Zangs on 26.12.12.
@@ -7,17 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ShowViewController.h"
 
-@protocol ShowViewDelegate;
-
-@interface ShowViewController : UITableViewController
+@interface ShowMenuViewController : UIViewController <ShowViewDelegate>
 
 @property (nonatomic, assign) id<ShowViewDelegate> delegate;
-
-@end
-
-@protocol ShowViewDelegate <NSObject>
-
-- (BOOL)areNotificationsEnabled;
 
 @end

@@ -26,9 +26,13 @@
 		54BE4324168B1A4600173763 /* OptionsMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE4323168B1A4600173763 /* OptionsMenuViewController.m */; };
 		54BE4327168B1BCD00173763 /* ScheduleMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE4326168B1BCD00173763 /* ScheduleMenuViewController.m */; };
 		54BE432B168B1BE500173763 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE432A168B1BE500173763 /* ScheduleViewController.m */; };
-		54BE432E168B1C0D00173763 /* ShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE432D168B1C0D00173763 /* ShowViewController.m */; };
 		54BE4340168B223900173763 /* cal.png in Resources */ = {isa = PBXBuildFile; fileRef = 54BE433E168B223900173763 /* cal.png */; };
 		54BE4341168B223900173763 /* cal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 54BE433F168B223900173763 /* cal@2x.png */; };
+		54BE4344168B2A8A00173763 /* Schedule.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE4343168B2A8A00173763 /* Schedule.m */; };
+		54BE4347168B363000173763 /* ShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE4346168B363000173763 /* ShowViewController.m */; };
+		54BE434A168B382100173763 /* ShowMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE4349168B382100173763 /* ShowMenuViewController.m */; };
+		54BE434D168B531F00173763 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 54BE434B168B531E00173763 /* facebook.png */; };
+		54BE434E168B531F00173763 /* facebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 54BE434C168B531E00173763 /* facebook@2x.png */; };
 		54E69A0C168768DC0055425E /* icon_114.png in Resources */ = {isa = PBXBuildFile; fileRef = 54E69A0B168768DC0055425E /* icon_114.png */; };
 		54E69A0E168768DF0055425E /* icon_57.png in Resources */ = {isa = PBXBuildFile; fileRef = 54E69A0D168768DF0055425E /* icon_57.png */; };
 /* End PBXBuildFile section */
@@ -63,10 +67,16 @@
 		54BE4326168B1BCD00173763 /* ScheduleMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleMenuViewController.m; sourceTree = "<group>"; };
 		54BE4329168B1BE500173763 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
 		54BE432A168B1BE500173763 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleViewController.m; sourceTree = "<group>"; };
-		54BE432C168B1C0D00173763 /* ShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowViewController.h; sourceTree = "<group>"; };
-		54BE432D168B1C0D00173763 /* ShowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowViewController.m; sourceTree = "<group>"; };
 		54BE433E168B223900173763 /* cal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cal.png; sourceTree = "<group>"; };
 		54BE433F168B223900173763 /* cal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cal@2x.png"; sourceTree = "<group>"; };
+		54BE4342168B2A8A00173763 /* Schedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Schedule.h; sourceTree = "<group>"; };
+		54BE4343168B2A8A00173763 /* Schedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Schedule.m; sourceTree = "<group>"; };
+		54BE4345168B363000173763 /* ShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowViewController.h; sourceTree = "<group>"; };
+		54BE4346168B363000173763 /* ShowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowViewController.m; sourceTree = "<group>"; };
+		54BE4348168B382100173763 /* ShowMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowMenuViewController.h; sourceTree = "<group>"; };
+		54BE4349168B382100173763 /* ShowMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowMenuViewController.m; sourceTree = "<group>"; };
+		54BE434B168B531E00173763 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
+		54BE434C168B531E00173763 /* facebook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook@2x.png"; sourceTree = "<group>"; };
 		54E69A0B168768DC0055425E /* icon_114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_114.png; sourceTree = "<group>"; };
 		54E69A0D168768DF0055425E /* icon_57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_57.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -132,6 +142,8 @@
 				54BE4320168B172B00173763 /* not_found.jpg */,
 				54BE433E168B223900173763 /* cal.png */,
 				54BE433F168B223900173763 /* cal@2x.png */,
+				54BE434B168B531E00173763 /* facebook.png */,
+				54BE434C168B531E00173763 /* facebook@2x.png */,
 				5457347D16823953006459B8 /* Supporting Files */,
 			);
 			path = junction11;
@@ -169,8 +181,12 @@
 				54BE4326168B1BCD00173763 /* ScheduleMenuViewController.m */,
 				54BE4329168B1BE500173763 /* ScheduleViewController.h */,
 				54BE432A168B1BE500173763 /* ScheduleViewController.m */,
-				54BE432C168B1C0D00173763 /* ShowViewController.h */,
-				54BE432D168B1C0D00173763 /* ShowViewController.m */,
+				54BE4342168B2A8A00173763 /* Schedule.h */,
+				54BE4343168B2A8A00173763 /* Schedule.m */,
+				54BE4348168B382100173763 /* ShowMenuViewController.h */,
+				54BE4349168B382100173763 /* ShowMenuViewController.m */,
+				54BE4345168B363000173763 /* ShowViewController.h */,
+				54BE4346168B363000173763 /* ShowViewController.m */,
 			);
 			name = Schedule;
 			sourceTree = "<group>";
@@ -237,6 +253,8 @@
 				54BE4321168B172B00173763 /* not_found.jpg in Resources */,
 				54BE4340168B223900173763 /* cal.png in Resources */,
 				54BE4341168B223900173763 /* cal@2x.png in Resources */,
+				54BE434D168B531F00173763 /* facebook.png in Resources */,
+				54BE434E168B531F00173763 /* facebook@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,7 +273,9 @@
 				54BE4324168B1A4600173763 /* OptionsMenuViewController.m in Sources */,
 				54BE4327168B1BCD00173763 /* ScheduleMenuViewController.m in Sources */,
 				54BE432B168B1BE500173763 /* ScheduleViewController.m in Sources */,
-				54BE432E168B1C0D00173763 /* ShowViewController.m in Sources */,
+				54BE4344168B2A8A00173763 /* Schedule.m in Sources */,
+				54BE4347168B363000173763 /* ShowViewController.m in Sources */,
+				54BE434A168B382100173763 /* ShowMenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

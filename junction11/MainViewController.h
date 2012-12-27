@@ -7,8 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ViewController.h"
+#import "ScheduleMenuViewController.h"
 
-@interface MainViewController : UIViewController
+@protocol MainViewDelegate;
+
+@interface MainViewController : UIViewController <ShowViewDelegate>
+
+@property (nonatomic, assign) id<ShowViewDelegate, MainViewDelegate> delegate;
+//@property (nonatomic, assign) id<ShowViewDelegate> delegateShow;
+//@property (nonatomic, assign) id<MainViewDelegate> delegateMain;
+
+@end
+
+@protocol MainViewDelegate <NSObject>
+
+- (BOOL)isHeighStreamEnabled;
+- (void)optionsWillAppear;
+- (void)optionsWillDisappear;
 
 @end

@@ -16,6 +16,9 @@
 @end
 
 @implementation MainViewController
+@synthesize delegate = _delegate;
+//@synthesize delegateShow = _delegateShow;
+//@synthesize delegateMain = _delegateMain;
 @synthesize optionsButton = _optionsButton;
 @synthesize swipeGesture = _swipeGesture;
 @synthesize isOptionsVisible = _isOptionsVisible;
@@ -41,10 +44,26 @@
     self.isOptionsVisible = false;
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+//    NSLog(@"Searching Segue...");
+    if ([segue.identifier isEqualToString:@"showSchedule"]) {
+//        NSLog(@"showSchedule intercepted...");
+        if ([segue.destinationViewController isKindOfClass:[ScheduleMenuViewController class]]) {
+            ((ScheduleMenuViewController *)segue.destinationViewController).delegate = self;
+        }
+    }
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (BOOL)areNotificationsEnabled
+{
+    return [self.delegate areNotificationsEnabled];
 }
 
 - (IBAction)loadView:(id)sender {
@@ -57,10 +76,13 @@
         
         self.optionsButton.title = @"Options";
         
-        if ([self.parentViewController isKindOfClass:[ViewController class]]) {
-            ViewController *parent = (ViewController *)self.parentViewController;
-            [parent optionsWillDisappear];
-        }
+        [self.delegate optionsWillDisappear];
+//        [self.delegateMain optionsWillDisappear];
+        
+//        if ([self.parentViewController isKindOfClass:[ViewController class]]) {
+//            ViewController *parent = (ViewController *)self.parentViewController;
+//            [parent optionsWillDisappear];
+//        }
         
         self.isOptionsVisible = false;
         self.swipeGesture.direction = UISwipeGestureRecognizerDirectionRight;
@@ -69,10 +91,13 @@
         
         self.optionsButton.title = @"Back";
         
-        if ([self.parentViewController isKindOfClass:[ViewController class]]) {
-            ViewController *parent = (ViewController *)self.parentViewController;
-            [parent optionsWillAppear];
-        }
+        [self.delegate optionsWillAppear];
+//        [self.delegateMain optionsWillAppear];
+        
+//        if ([self.parentViewController isKindOfClass:[ViewController class]]) {
+//            ViewController *parent = (ViewController *)self.parentViewController;
+//            [parent optionsWillAppear];
+//        }
         
         self.isOptionsVisible = true;
         self.swipeGesture.direction = UISwipeGestureRecognizerDirectionLeft;
@@ -90,4 +115,8 @@
     [self loadView:nil];
 }
 
+- (IBAction)test:(id)sender {
+    NSLog(@"STREAM %@", ([self.delegate isHeighStreamEnabled]) ? @"YES" : @"NO");
+    NSLog(@"NOTIFICATION %@", ([self.delegate areNotificationsEnabled]) ? @"YES" : @"NO");
+}
 @end

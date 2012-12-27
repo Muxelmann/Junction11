@@ -13,13 +13,17 @@
 @property (weak, nonatomic) IBOutlet UIImageView *webcam;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingWebcam;
 @property (weak, nonatomic) IBOutlet UITextView *descriptionBox;
+@property (weak, nonatomic) IBOutlet UISwitch *highQualitySwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *notoficationsSwitch;
 
 @property (strong, nonatomic) NSThread *updateImage;
 
 @end
 
 @implementation OptionsViewController
-
+@synthesize highQualitySwitch = _highQualitySwitch;
+@synthesize notoficationsSwitch = _notoficationsSwitch;
+@synthesize delegate = _delegate;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -28,6 +32,12 @@
         // Custom initialization
     }
     return self;
+}
+
+- (id)delegate
+{
+    if (!_delegate) _delegate = (id)self.parentViewController;
+    return _delegate;
 }
 
 - (void)viewDidLoad
@@ -39,6 +49,10 @@
     self.loadingWebcam.hidesWhenStopped = YES;
     self.loadingWebcam.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
     self.loadingWebcam.backgroundColor = [UIColor clearColor];
+    
+    NSLog(@"DELEGATE: %@", self.delegate);
+    [self.highQualitySwitch setOn:[self.delegate isHeighStreamEnabled] animated:YES];
+    [self.notoficationsSwitch setOn:[self.delegate areNotificationsEnabled] animated:YES];
     
     if ([self.view isKindOfClass:[UITableView class]]) {
 //        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shadow_512.png"]];
@@ -62,6 +76,31 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+
+- (IBAction)switchFlicked:(UISwitch *)sender {
+    switch (sender.tag) {
+        case 0: // Quality
+            [self.delegate setHeighStreamEnabled:sender.isOn];
+            break;
+            
+        case 1: // Notifications
+            [self.delegate setNotificationsEnabled:sender.isOn];
+            break;
+        default:
+            break;
+    }
+}
+
+- (BOOL)isInHighStream
+{
+    return self.highQualitySwitch.isOn;
+}
+
+- (BOOL)areNotificationsEnabled
+{
+    return self.notoficationsSwitch.isOn;
 }
 
 - (void)didReceiveMemoryWarning

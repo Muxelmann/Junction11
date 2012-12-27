@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Schedule.h"
+#import "ShowMenuViewController.h"
 
-@interface ScheduleViewController : UITableViewController
+@interface ScheduleViewController : UITableViewController <ShowViewDelegate>
+
+@property (nonatomic, assign) id<ShowViewDelegate> delegate;
 
 @end

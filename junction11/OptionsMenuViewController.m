@@ -10,9 +10,13 @@
 
 @interface OptionsMenuViewController ()
 
+@property (weak, nonatomic) IBOutlet UIView *container;
+
 @end
 
 @implementation OptionsMenuViewController
+@synthesize delegate = _delegate;
+@synthesize container = _container;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -32,10 +36,54 @@
     self.view.backgroundColor = [UIColor clearColor];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+//    NSLog(@"View will appread");
+//    NSLog(@"No of children: %i", [self.childViewControllers count]);
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+//    NSLog(@"View will disappear");
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+//    NSLog(@"Searching Segue...");
+    if ([segue.identifier isEqualToString:@"loadOptions"]) {
+//        NSLog(@"loadOptions intercepted...");
+        if ([segue.destinationViewController isKindOfClass:[OptionsViewController class]]) {
+            ((OptionsViewController *)segue.destinationViewController).delegate = self;
+        }
+    }
+}
+
+- (void)setHeighStreamEnabled:(bool)isEnabled
+{
+    [self.delegate setHeighStreamEnabled:isEnabled];
+}
+
+- (void)setNotificationsEnabled:(bool)isEnabled
+{
+    [self.delegate setNotificationsEnabled:isEnabled];
+}
+
+- (BOOL)areNotificationsEnabled
+{
+    return [self.delegate areNotificationsEnabled];
+}
+
+- (BOOL)isHeighStreamEnabled
+{
+    return [self.delegate isHeighStreamEnabled];
 }
 
 @end

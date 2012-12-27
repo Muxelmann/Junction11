@@ -11,7 +11,10 @@
 @interface ViewController ()
 
 @property (strong, nonatomic) MainViewController *main;
-@property (strong, nonatomic) OptionsViewController *options;
+@property (strong, nonatomic) OptionsMenuViewController *options;
+
+@property BOOL heighStream;
+@property BOOL notifications;
 
 - (void)didReceiveMemoryWarning;
 
@@ -20,6 +23,8 @@
 @implementation ViewController
 @synthesize main = _main;
 @synthesize options = _options;
+@synthesize heighStream = _heighStream;
+@synthesize notifications = _notifications;
 
 - (void)viewDidLoad
 {
@@ -28,6 +33,13 @@
     
     self.main = [self.storyboard instantiateViewControllerWithIdentifier:@"mainViewControllerID"];
     self.options = [self.storyboard instantiateViewControllerWithIdentifier:@"optionsMenuViewControllerID"];
+    
+    // Set self as options delegate, so that data change is received
+    self.options.delegate = self;
+    self.main.delegate = self;
+    
+    self.notifications = YES;
+    self.heighStream = YES;
     
     // Make the main and options panel a child view controller
     [self addChildViewController:self.main];
@@ -51,16 +63,44 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (BOOL)optionsWillAppear
+#pragma mark ShowViewDelegate
+
+- (BOOL)areNotificationsEnabled
 {
-    [self.options viewWillAppear:YES];
-    return true;
+    NSLog(@"NOTIFICATIONS CHECK! [%@]", (self.notifications) ? @"YES" : @"NO");
+    return self.notifications;
 }
 
-- (BOOL)optionsWillDisappear
+- (BOOL)isHeighStreamEnabled
+{
+    NSLog(@"HEIGH STREAM CHECK! [%@]", (self.heighStream) ? @"YES" : @"NO");
+    return self.heighStream;
+}
+
+#pragma mark MainViewDelegate
+
+- (void)optionsWillAppear
+{
+    [self.options viewWillAppear:YES];
+}
+
+- (void)optionsWillDisappear
 {
     [self.options viewWillDisappear:YES];
-    return true;
+}
+
+#pragma mark OptionsViewDelegate
+
+- (void)setHeighStreamEnabled:(bool)isEnabled
+{
+    NSLog(@"STREAM CHANGED! [%@]", (isEnabled) ? @"YES" : @"NO");
+    self.heighStream = isEnabled;
+}
+
+- (void)setNotificationsEnabled:(bool)isEnabled
+{
+    NSLog(@"NOTIFICATIONS CHANGED! [%@]", (isEnabled) ? @"YES" : @"NO");
+    self.notifications = isEnabled;
 }
 
 @end

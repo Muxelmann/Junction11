@@ -7,12 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OptionsMenuViewController.h"
 #import "OptionsViewController.h"
 #import "MainViewController.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <OptionViewDelegate, MainViewDelegate, ShowViewDelegate>
 
-- (BOOL)optionsWillAppear;
-- (BOOL)optionsWillDisappear;
+//- (void)setHeighStreamEnabled:(bool)isEnabled;
+//- (void)setNotificationsEnabled:(bool)isEnabled;
+
+//@property (nonatomic) BOOL isInHeighStream;
+//@property (nonatomic) BOOL areNotificationsEnabled;
+//- (BOOL)isInHeighStream;
+//- (BOOL)areNotificationsEnabled;
 
 @end

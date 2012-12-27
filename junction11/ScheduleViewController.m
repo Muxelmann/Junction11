@@ -9,10 +9,16 @@
 #import "ScheduleViewController.h"
 
 @interface ScheduleViewController ()
-
+@property (strong, nonatomic) Schedule *schedule;
+@property (strong, nonatomic) ShowMenuViewController *show;
+@property (strong, nonatomic) NSThread *updateSchedule;
 @end
 
 @implementation ScheduleViewController
+@synthesize delegate = _delegate;
+@synthesize schedule = _schedule;
+@synthesize show = _show;
+@synthesize updateSchedule = _updateSchedule;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -26,7 +32,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+//    self.show = [self.storyboard instantiateViewControllerWithIdentifier:@"showMenuViewControllerID"];
+//    self.show.view.backgroundColor = [UIColor redColor];
+//    self.show.delegate = self;
+    
+    [self updateShows];
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -34,26 +45,64 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+//- (void)dealloc
+//{
+//    NSLog(@"Dealloc ScheduleViewController");
+//    _schedule = nil;
+//    _show = nil;
+//    _updateSchedule = nil;
+////    [super dealloc];
+//}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
+- (id)delegate
+{
+    if (!_delegate) _delegate = (id)self.parentViewController;
+    return _delegate;
+}
+
+- (BOOL)areNotificationsEnabled
+{
+    return [self.delegate areNotificationsEnabled];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSLog(@"Searching Segue...");
+    if ([segue.identifier isEqualToString:@"showShows"]) {
+        NSLog(@"showShows intercepted...");
+        if ([segue.destinationViewController isKindOfClass:[ShowMenuViewController class]]) {
+            ((ShowMenuViewController *)segue.destinationViewController).delegate = self;
+            
+            if ([sender isKindOfClass:[UITableViewCell class]]) {
+                UITableViewCell *cell = sender;
+                cell.selected = NO;
+                
+            }
+        }
+    }
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
+//#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return [self.schedule numberOfDaysInSchedule];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
+//#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    
+    return [self.schedule numberOfShowsPerDay:section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -61,9 +110,24 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
+    UILabel *titleLabel = (UILabel *)[cell viewWithTag:1];
+    UILabel *infoLabel = (UILabel *)[cell viewWithTag:2];
+    UIImageView *socialImage = (UIImageView *)[cell viewWithTag:3];
+    
+    NSInteger show = indexPath.row;
+    NSInteger day = indexPath.section;
+    titleLabel.text = [self.schedule titleForShow:show onDay:day];
+    infoLabel.text = [self.schedule infoForShow:show onDay:day];
+    socialImage.hidden = ![self.schedule isLinkWithShow:show onDay:day];
+    
     // Configure the cell...
     
     return cell;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [self.schedule nameForDay:section];
 }
 
 /*
@@ -116,6 +180,30 @@
      // Pass the selected object to the new view controller.
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
+}
+
+- (Schedule *)schedule
+{
+    if (!_schedule) {
+        _schedule = [[Schedule alloc] init];
+    }
+    return _schedule;
+}
+
+- (void)updateShows
+{
+    if (!self.updateSchedule.isExecuting) {
+        
+        self.updateSchedule = [[NSThread alloc] initWithTarget:self selector:@selector(updateShowsThread) object:nil];
+        [self.updateSchedule start];
+    }
+}
+
+- (void)updateShowsThread
+{
+    [self.schedule update];
+    if ([self.view isKindOfClass:[UITableView class]])
+        [(UITableView *)self.view reloadData];
 }
 
 @end

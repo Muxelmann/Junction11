@@ -13,6 +13,7 @@
 @end
 
 @implementation ScheduleMenuViewController
+@synthesize delegate = _delegate;
 @synthesize navigationBar = _navigationBar;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -24,16 +25,20 @@
     return self;
 }
 
+//- (void)dealloc
+//{
+//    NSLog(@"Dealloc ScheduleMenuViewController");
+//    _navigationBar = nil;
+//}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-//    UINavigationItem *backButton = [[UINavigationItem alloc] initWithTitle:@"Back"];
-//    UINavigationItem *title = [[UINavigationItem alloc]initWithTitle:@"Schedule"];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleDone target:self action:@selector(backButtonPressed:)];
 
-    UINavigationItem *title = [[UINavigationItem alloc] initWithTitle:@"Title"];
+    UINavigationItem *title = [[UINavigationItem alloc] initWithTitle:@"Schedule"];
     title.rightBarButtonItem = backButton;
     title.hidesBackButton = YES;
 
@@ -48,9 +53,34 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+//    NSLog(@"Searching Segue...");
+    if ([segue.identifier isEqualToString:@"loadSchedule"]) {
+//        NSLog(@"loadSchedule intercepted...");
+        if ([segue.destinationViewController isKindOfClass:[ScheduleViewController class]]) {
+            ((ScheduleViewController *)segue.destinationViewController).delegate = self;
+        }
+    }
+}
+
+- (BOOL)areNotificationsEnabled
+{
+    return [self.delegate areNotificationsEnabled];
+}
+
 - (IBAction)backButtonPressed:(id)sender
 {
-    NSLog(@"Back...");
+    [self viewWillDisappear:YES];
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self saveNewNotifications];
+    }];
+}
+
+- (void)saveNewNotifications
+{
+    [self removeFromParentViewController];
+//    NSLog(@"Save notifications");
 }
 
 @end
