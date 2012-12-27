@@ -9,15 +9,27 @@
 #import <UIKit/UIKit.h>
 
 @protocol ShowViewDelegate;
+@protocol ShowDataSource;
 
 @interface ShowViewController : UITableViewController
 
 @property (nonatomic, assign) id<ShowViewDelegate> delegate;
+@property (nonatomic, assign) id<ShowDataSource> dataSource;
 
 @end
 
 @protocol ShowViewDelegate <NSObject>
 
 - (BOOL)areNotificationsEnabled;
+
+@end
+
+@protocol ShowDataSource <NSObject>
+
+- (NSString *)showTitle;
+- (NSString *)showInfo;
+- (NSString *)showDescription;
+- (BOOL)showHasURL;
+- (NSString *)showURL;
 
 @end

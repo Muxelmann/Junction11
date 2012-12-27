@@ -12,6 +12,7 @@
 @property (strong, nonatomic) Schedule *schedule;
 @property (strong, nonatomic) ShowMenuViewController *show;
 @property (strong, nonatomic) NSThread *updateSchedule;
+@property (strong, nonatomic) NSIndexPath *selectedIndex;
 @end
 
 @implementation ScheduleViewController
@@ -19,6 +20,7 @@
 @synthesize schedule = _schedule;
 @synthesize show = _show;
 @synthesize updateSchedule = _updateSchedule;
+@synthesize selectedIndex = _selectedIndex;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -60,29 +62,23 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (id)delegate
-{
-    if (!_delegate) _delegate = (id)self.parentViewController;
-    return _delegate;
-}
-
-- (BOOL)areNotificationsEnabled
-{
-    return [self.delegate areNotificationsEnabled];
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSLog(@"Searching Segue...");
+//    NSLog(@"Searching Segue...");
     if ([segue.identifier isEqualToString:@"showShows"]) {
-        NSLog(@"showShows intercepted...");
+//        NSLog(@"showShows intercepted...");
         if ([segue.destinationViewController isKindOfClass:[ShowMenuViewController class]]) {
-            ((ShowMenuViewController *)segue.destinationViewController).delegate = self;
+            ShowMenuViewController *viewController = segue.destinationViewController;
+            viewController.delegate = self.delegate;
+            viewController.dataSource = self;
             
             if ([sender isKindOfClass:[UITableViewCell class]]) {
                 UITableViewCell *cell = sender;
                 cell.selected = NO;
                 
+                self.selectedIndex = [(UITableView *)self.view indexPathForCell:cell];
+                
+//                NSLog(@"computed Index path %@", indexPath);
             }
         }
     }
@@ -204,6 +200,33 @@
     [self.schedule update];
     if ([self.view isKindOfClass:[UITableView class]])
         [(UITableView *)self.view reloadData];
+}
+
+#pragma mark ShowDataSource
+
+- (NSString *)showTitle
+{
+    return [self.schedule titleForShow:self.selectedIndex.row onDay:self.selectedIndex.section];
+}
+
+- (BOOL)showHasURL
+{
+    return [self.schedule isLinkWithShow:self.selectedIndex.row onDay:self.selectedIndex.section];
+}
+
+- (NSString *)showInfo
+{
+    return [self.schedule infoForShow:self.selectedIndex.row onDay:self.selectedIndex.section];
+}
+
+- (NSString *)showDescription
+{
+    return [self.schedule descriptionForShow:self.selectedIndex.row onDay:self.selectedIndex.section];
+}
+
+- (NSString *)showURL
+{
+    return [self.schedule urlForShow:self.selectedIndex.row onDay:self.selectedIndex.section];
 }
 
 @end

@@ -9,12 +9,11 @@
 #import "ShowViewController.h"
 
 @interface ShowViewController ()
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @end
 
 @implementation ShowViewController
 @synthesize delegate = _delegate;
-@synthesize titleLabel = _titleLabel;
+@synthesize dataSource = _dataSource;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -44,39 +43,130 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (id)delegate
-{
-    if (!_delegate) _delegate = (id)self.parentViewController;
-    return _delegate;
-}
 
-/*
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
+//#warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    NSInteger numberOfSections = 1;
+    
+    if ([self.delegate areNotificationsEnabled])
+        numberOfSections++;
+    
+    if ([self.dataSource showHasURL])
+        numberOfSections++;
+    
+    return numberOfSections;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
+//#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    if (section == 0)
+        return 2;
+    else
+        return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    NSString *CellIdentifier;
+    
+    switch (indexPath.section) {
+        case 0: // Standard
+            switch (indexPath.row) {
+                case 0:
+                    CellIdentifier = @"topCell";
+                    break;
+                    
+                case 1:
+                    CellIdentifier = @"textCell";
+                    break;
+            }
+            break;
+        case 1: // Notification or link...
+            if ([self.delegate areNotificationsEnabled])
+                CellIdentifier = @"notifyCell";
+            else
+                CellIdentifier = @"linkCell";
+            break;
+        case 2:
+            CellIdentifier = @"linkCell";
+            break;
+        default:
+            break;
+    }
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
     // Configure the cell...
     
+    UILabel *titleLabel = (UILabel *)[cell viewWithTag:1];
+    if (titleLabel) {
+        titleLabel.textAlignment = NSTextAlignmentRight;
+        titleLabel.font = [UIFont boldSystemFontOfSize:20];
+        titleLabel.text = [self.dataSource showTitle];
+    }
+    
+    UILabel *infoLabel = (UILabel *)[cell viewWithTag:2];
+    if (infoLabel) {
+        infoLabel.textAlignment = NSTextAlignmentRight;
+        infoLabel.textColor = [UIColor darkGrayColor];
+        infoLabel.font = [UIFont italicSystemFontOfSize:15];
+        infoLabel.text = [self.dataSource showInfo];
+    }
+    
+    UITextView *descriptionTextField = (UITextView *)[cell viewWithTag:3];
+    if (descriptionTextField) {
+        descriptionTextField.backgroundColor = [UIColor clearColor];
+        descriptionTextField.text = [self.dataSource showDescription];
+    }
+    
+    UILabel *linkLabel = (UILabel *)[cell viewWithTag:4];
+    if (linkLabel) {
+        NSLog(@"%@", [self.dataSource showURL]);
+        linkLabel.text = [self.dataSource showURL];
+    }
+    
+    UILabel *notifyLabel = (UILabel *)[cell viewWithTag:5];
+    if (notifyLabel) {
+        notifyLabel.text = @"Notify Here";
+    }
+    
     return cell;
 }
-*/
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    switch (indexPath.section) {
+        case 0: // Standard
+            switch (indexPath.row) {
+                case 0:
+                    return 84.0;
+                    break;
+                    
+                case 1:
+                    return 150.0;
+                    break;
+            }
+            break;
+        case 1: // Notification or link...
+            if ([self.delegate areNotificationsEnabled])
+                return 46.0;
+            else
+                return 46.0;
+            break;
+        case 2:
+            return 46.0;
+            break;
+    }
+    
+    return 46.0;
+}
+
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

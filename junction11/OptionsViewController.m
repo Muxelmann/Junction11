@@ -34,12 +34,6 @@
     return self;
 }
 
-- (id)delegate
-{
-    if (!_delegate) _delegate = (id)self.parentViewController;
-    return _delegate;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -50,7 +44,6 @@
     self.loadingWebcam.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
     self.loadingWebcam.backgroundColor = [UIColor clearColor];
     
-    NSLog(@"DELEGATE: %@", self.delegate);
     [self.highQualitySwitch setOn:[self.delegate isHeighStreamEnabled] animated:YES];
     [self.notoficationsSwitch setOn:[self.delegate areNotificationsEnabled] animated:YES];
     

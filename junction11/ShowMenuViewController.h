@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "ShowViewController.h"
 
-@interface ShowMenuViewController : UIViewController <ShowViewDelegate>
+@interface ShowMenuViewController : UIViewController
 
 @property (nonatomic, assign) id<ShowViewDelegate> delegate;
+@property (nonatomic, assign) id<ShowDataSource> dataSource;
 
 @end

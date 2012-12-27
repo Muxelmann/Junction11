@@ -25,12 +25,6 @@
     return self;
 }
 
-//- (void)dealloc
-//{
-//    NSLog(@"Dealloc ScheduleMenuViewController");
-//    _navigationBar = nil;
-//}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -59,14 +53,9 @@
     if ([segue.identifier isEqualToString:@"loadSchedule"]) {
 //        NSLog(@"loadSchedule intercepted...");
         if ([segue.destinationViewController isKindOfClass:[ScheduleViewController class]]) {
-            ((ScheduleViewController *)segue.destinationViewController).delegate = self;
+            ((ScheduleViewController *)segue.destinationViewController).delegate = self.delegate;
         }
     }
-}
-
-- (BOOL)areNotificationsEnabled
-{
-    return [self.delegate areNotificationsEnabled];
 }
 
 - (IBAction)backButtonPressed:(id)sender

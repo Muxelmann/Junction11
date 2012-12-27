@@ -17,6 +17,8 @@
 
 - (NSString *)titleForShow:(NSInteger)show onDay:(NSInteger)day;
 - (NSString *)infoForShow:(NSInteger)show onDay:(NSInteger)day;
+- (NSString *)descriptionForShow:(NSInteger)show onDay:(NSInteger)day;
 - (BOOL)isLinkWithShow:(NSInteger)show onDay:(NSInteger)day;
+- (NSString *)urlForShow:(NSInteger)show onDay:(NSInteger)day;
 
 @end

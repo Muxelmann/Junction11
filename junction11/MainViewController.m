@@ -17,8 +17,6 @@
 
 @implementation MainViewController
 @synthesize delegate = _delegate;
-//@synthesize delegateShow = _delegateShow;
-//@synthesize delegateMain = _delegateMain;
 @synthesize optionsButton = _optionsButton;
 @synthesize swipeGesture = _swipeGesture;
 @synthesize isOptionsVisible = _isOptionsVisible;
@@ -50,7 +48,7 @@
     if ([segue.identifier isEqualToString:@"showSchedule"]) {
 //        NSLog(@"showSchedule intercepted...");
         if ([segue.destinationViewController isKindOfClass:[ScheduleMenuViewController class]]) {
-            ((ScheduleMenuViewController *)segue.destinationViewController).delegate = self;
+            ((ScheduleMenuViewController *)segue.destinationViewController).delegate = self.delegate;
         }
     }
 }
@@ -59,11 +57,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (BOOL)areNotificationsEnabled
-{
-    return [self.delegate areNotificationsEnabled];
 }
 
 - (IBAction)loadView:(id)sender {

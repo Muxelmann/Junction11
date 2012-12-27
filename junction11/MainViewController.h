@@ -11,11 +11,9 @@
 
 @protocol MainViewDelegate;
 
-@interface MainViewController : UIViewController <ShowViewDelegate>
+@interface MainViewController : UIViewController// <ShowViewDelegate>
 
 @property (nonatomic, assign) id<ShowViewDelegate, MainViewDelegate> delegate;
-//@property (nonatomic, assign) id<ShowViewDelegate> delegateShow;
-//@property (nonatomic, assign) id<MainViewDelegate> delegateMain;
 
 @end
 

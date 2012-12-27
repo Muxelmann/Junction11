@@ -61,29 +61,9 @@
     if ([segue.identifier isEqualToString:@"loadOptions"]) {
 //        NSLog(@"loadOptions intercepted...");
         if ([segue.destinationViewController isKindOfClass:[OptionsViewController class]]) {
-            ((OptionsViewController *)segue.destinationViewController).delegate = self;
+            ((OptionsViewController *)segue.destinationViewController).delegate = self.delegate;
         }
     }
-}
-
-- (void)setHeighStreamEnabled:(bool)isEnabled
-{
-    [self.delegate setHeighStreamEnabled:isEnabled];
-}
-
-- (void)setNotificationsEnabled:(bool)isEnabled
-{
-    [self.delegate setNotificationsEnabled:isEnabled];
-}
-
-- (BOOL)areNotificationsEnabled
-{
-    return [self.delegate areNotificationsEnabled];
-}
-
-- (BOOL)isHeighStreamEnabled
-{
-    return [self.delegate isHeighStreamEnabled];
 }
 
 @end

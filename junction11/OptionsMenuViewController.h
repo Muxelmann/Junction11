@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "OptionsViewController.h"
 
-@interface OptionsMenuViewController : UIViewController <OptionViewDelegate>
+@interface OptionsMenuViewController : UIViewController
 
 @property (nonatomic, assign) id<OptionViewDelegate> delegate;
 

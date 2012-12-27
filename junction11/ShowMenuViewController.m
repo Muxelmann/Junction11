@@ -14,6 +14,7 @@
 
 @implementation ShowMenuViewController
 @synthesize delegate = _delegate;
+@synthesize dataSource = _dataSource;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -42,15 +43,11 @@
     if ([segue.identifier isEqualToString:@"showShow"]) {
 //        NSLog(@"showShow intercepted...");
         if ([segue.destinationViewController isKindOfClass:[ShowViewController class]]) {
-            ((ShowViewController *)segue.destinationViewController).delegate = self;
+            ShowViewController *viewController = segue.destinationViewController;
+            viewController.delegate = self.delegate;
+            viewController.dataSource = self.dataSource;
         }
     }
-}
-
-
-- (BOOL)areNotificationsEnabled
-{
-    return [self.delegate areNotificationsEnabled];
 }
 
 @end

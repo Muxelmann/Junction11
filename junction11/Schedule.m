@@ -181,7 +181,6 @@
 - (NSString *)infoForShow:(NSInteger)show onDay:(NSInteger)day
 {
     NSInteger numberOfPastShows = [self numberOfShowsBefore:show onDay:day];
-    
         
     float time = [[[self.schedule objectAtIndex:numberOfPastShows+show] objectForKey:@"<time>"] floatValue];
     float duration = [[[self.schedule objectAtIndex:numberOfPastShows+show] objectForKey:@"<duration>"] floatValue];
@@ -235,13 +234,37 @@
     
 }
 
+- (NSString *)descriptionForShow:(NSInteger)show onDay:(NSInteger)day
+{
+    NSInteger numberOfPastShows = [self numberOfShowsBefore:show onDay:day];
+    NSString *description = [[self.schedule objectAtIndex:numberOfPastShows+show] objectForKey:@"<description>"];
+    
+    if ([description isEqualToString:@""])
+        return @"No description available";
+    else
+        return description;
+}
+
 - (BOOL)isLinkWithShow:(NSInteger)show onDay:(NSInteger)day
 {
     NSInteger numberOfPastShows = [self numberOfShowsBefore:show onDay:day];
     
     NSString *url = [[self.schedule objectAtIndex:numberOfPastShows+show] objectForKey:@"<url>"];
 //    NSLog(@"URL = %i", [url isEqualToString:@""]);
-    return [url isEqualToString:@""];
+    return ![url isEqualToString:@""];
+}
+
+- (NSString *)urlForShow:(NSInteger)show onDay:(NSInteger)day
+{
+    NSInteger numberOfPastShows = [self numberOfShowsBefore:show onDay:day];
+    
+    NSString *url = [[self.schedule objectAtIndex:numberOfPastShows+show] objectForKey:@"<url>"];
+    
+    if ([url isEqualToString:@""])
+        return @"No link given";
+    else
+        return url;
+    
 }
 
 - (NSInteger)numberOfShowsBefore:(NSInteger)show onDay:(NSInteger)day
