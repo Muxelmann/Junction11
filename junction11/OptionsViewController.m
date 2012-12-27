@@ -48,7 +48,7 @@
     [self.notoficationsSwitch setOn:[self.delegate areNotificationsEnabled] animated:YES];
     
     if ([self.view isKindOfClass:[UITableView class]]) {
-//        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shadow_512.png"]];
+
         UIImageView *imageView = [[UIImageView alloc] init];
         imageView.backgroundColor = [UIColor clearColor];
         imageView.contentMode = UIViewContentModeScaleToFill;
@@ -57,12 +57,9 @@
         tableView.backgroundColor = [UIColor clearColor];
         tableView.opaque = YES;
         tableView.backgroundView = imageView;
-        
-        [self updateWebcam];
     }
     
-    self.descriptionBox.bounds = CGRectMake(0, 0, 239, 200);
-    self.descriptionBox.text = @"This application has been developed to listen to Reading University's student web-radio.\n\rIt works best over Wifi and 3G as well as faster versions of GSM. In case you experience some streaming issues you can reduce the throughput by turning the high quality stream off.\n\rFurthermore you can have a quick peak into out studio. Update this webcam feed by tapping on it. Beware that it may take a while to load the image, so please be patient.";
+    [self updateWebcam];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -71,8 +68,26 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        self.descriptionBox.bounds = CGRectMake(0, 0, self.view.bounds.size.width-20, 318);
+    } else {
+        self.descriptionBox.bounds = CGRectMake(0, 0, self.view.bounds.size.width-70, 318);
+    }
+    self.descriptionBox.text = @"This application has been developed to listen to Reading University's student web-radio.\n\rIt works best over Wifi and 3G as well as faster versions of GSM. In case you experience some streaming issues you can reduce the throughput by turning the high quality stream off.\n\rFurthermore you can have a quick peak into out studio. Update this webcam feed by tapping on it. Beware that it may take a while to load the image, so please be patient.";
+    
+    [(UITableView *)self.view reloadData];
+    
+//    CGRect rect = self.webcam.frame;
+//    rect.size = CGSizeMake(self.view.bounds.size.height-2, self.view.bounds.size.width-2);
+//    self.webcam.frame = rect;
+}
 
 - (IBAction)switchFlicked:(UISwitch *)sender {
+    NSLog(@"Switch...");
     switch (sender.tag) {
         case 0: // Quality
             [self.delegate setHeighStreamEnabled:sender.isOn];
@@ -111,7 +126,7 @@
     
     // Create label with section title
     UILabel *label = [[UILabel alloc] init];
-    label.frame = CGRectMake(20, 6, 300, 30);
+    label.frame = CGRectMake(20, 6, self.view.bounds.size.width-40, 30);
     label.backgroundColor = [UIColor clearColor];
     label.textColor = [UIColor colorWithRed:.9 green:.9 blue:.9 alpha:1.0];
     label.shadowColor = [UIColor colorWithRed:.0 green:.0 blue:.0 alpha:.0];
@@ -137,7 +152,7 @@
     
     // Create label with section title
     UILabel *label = [[UILabel alloc] init];
-    label.frame = CGRectMake(0, 6, 259, 17);
+    label.frame = CGRectMake(0, 6, self.view.bounds.size.width, 17);
     label.backgroundColor = [UIColor clearColor];
     label.textColor = [UIColor colorWithRed:.8 green:.8 blue:.8 alpha:1.0];
     label.shadowColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:.8];
@@ -155,6 +170,24 @@
     
     return view;
 }
+
+//- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+//{
+//    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+//        NSLog(@"F2 [%f, %f]", self.view.frame.size.width, self.view.frame.size.height);
+//        NSLog(@"B2 [%f, %f]", self.view.bounds.size.width, self.view.bounds.size.height);
+//    }
+//}
+//
+//- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+//{
+//    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+//        
+//        NSLog(@"F2 [%f, %f]", self.view.frame.size.width, self.view.frame.size.height);
+//        NSLog(@"B2 [%f, %f]", self.view.bounds.size.width, self.view.bounds.size.height);
+//    }
+//}
+
 
 /*
 #pragma mark - Table view data source
@@ -272,19 +305,10 @@
         webcamImageRaw = [UIImage imageWithData:webcamData];
     }
     
-    // Converting Image to fit perfectly
-    CGSize imageSize = CGSizeMake(229, 170); // height & width - 2
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(imageSize.width, imageSize.height), NO, 0.0);
-    [webcamImageRaw drawInRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
-    UIImage *webcamImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
     // Apply image to background
-    CGRect rect = self.webcam.bounds;
-    rect.size = imageSize;
-    self.webcam.bounds = rect;
-    self.webcam.contentMode = UIViewContentModeCenter;
-    self.webcam.image = webcamImage;
+    self.webcam.contentMode = UIViewContentModeScaleToFill;// = UIViewContentModeCenter;
+    self.webcam.image = webcamImageRaw;
+    NSLog(@"WEBCAM %f", self.webcam.frame.size.width);
     
     // Stop the activity indicator
     self.webcam.hidden = NO;

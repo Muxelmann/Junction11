@@ -10,11 +10,13 @@
 
 @protocol ShowViewDelegate;
 @protocol ShowDataSource;
+@protocol ShowSchedulingDelegate;
 
 @interface ShowViewController : UITableViewController
 
-@property (nonatomic, assign) id<ShowViewDelegate> delegate;
+@property (nonatomic, assign) id<ShowViewDelegate, ShowSchedulingDelegate> delegate;
 @property (nonatomic, assign) id<ShowDataSource> dataSource;
+//@property (nonatomic, assign) id<ShowSchedulingDelegate> notificationsDelegate;
 
 @end
 
@@ -30,6 +32,17 @@
 - (NSString *)showInfo;
 - (NSString *)showDescription;
 - (BOOL)showHasURL;
+- (BOOL)showHasFacebookURL;
 - (NSString *)showURL;
+- (NSDate *)showNotify;
+- (NSDate *)showStartTime;
+
+@end
+
+@protocol ShowSchedulingDelegate <NSObject>
+
+- (void)scheduleNotificationFor:(id<ShowDataSource>)dataSource;
+- (BOOL)isNotificationForTime:(NSDate *)time;
+- (BOOL)unscheduleNotificationForTime:(NSDate*)time;
 
 @end

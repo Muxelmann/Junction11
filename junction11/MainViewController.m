@@ -50,6 +50,11 @@
         if ([segue.destinationViewController isKindOfClass:[ScheduleMenuViewController class]]) {
             ((ScheduleMenuViewController *)segue.destinationViewController).delegate = self.delegate;
         }
+    } else if ([segue.identifier isEqualToString:@"showSchedulePopover"]) {
+        
+        if ([segue.destinationViewController isKindOfClass:[ScheduleMenuViewController class]]) {
+            ((ScheduleMenuViewController *)segue.destinationViewController).delegate = self.delegate;
+        }
     }
 }
 
@@ -63,6 +68,8 @@
     
     CGRect rect = self.view.frame;
     CGFloat constant = 259;
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+        constant = 320;
     
     if (self.isOptionsVisible) {
         rect.origin.x -= constant;
@@ -70,12 +77,6 @@
         self.optionsButton.title = @"Options";
         
         [self.delegate optionsWillDisappear];
-//        [self.delegateMain optionsWillDisappear];
-        
-//        if ([self.parentViewController isKindOfClass:[ViewController class]]) {
-//            ViewController *parent = (ViewController *)self.parentViewController;
-//            [parent optionsWillDisappear];
-//        }
         
         self.isOptionsVisible = false;
         self.swipeGesture.direction = UISwipeGestureRecognizerDirectionRight;
@@ -84,13 +85,7 @@
         
         self.optionsButton.title = @"Back";
         
-        [self.delegate optionsWillAppear];
-//        [self.delegateMain optionsWillAppear];
-        
-//        if ([self.parentViewController isKindOfClass:[ViewController class]]) {
-//            ViewController *parent = (ViewController *)self.parentViewController;
-//            [parent optionsWillAppear];
-//        }
+        [self.delegate optionsWillAppearWithWidth:constant];
         
         self.isOptionsVisible = true;
         self.swipeGesture.direction = UISwipeGestureRecognizerDirectionLeft;

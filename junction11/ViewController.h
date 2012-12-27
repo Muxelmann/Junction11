@@ -11,7 +11,7 @@
 #import "OptionsViewController.h"
 #import "MainViewController.h"
 
-@interface ViewController : UIViewController <OptionViewDelegate, MainViewDelegate, ShowViewDelegate>
+@interface ViewController : UIViewController <OptionViewDelegate, MainViewDelegate, ShowViewDelegate, ShowSchedulingDelegate>
 
 //- (void)setHeighStreamEnabled:(bool)isEnabled;
 //- (void)setNotificationsEnabled:(bool)isEnabled;

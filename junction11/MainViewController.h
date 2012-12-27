@@ -11,16 +11,16 @@
 
 @protocol MainViewDelegate;
 
-@interface MainViewController : UIViewController// <ShowViewDelegate>
+@interface MainViewController : UIViewController
 
-@property (nonatomic, assign) id<ShowViewDelegate, MainViewDelegate> delegate;
+@property (nonatomic, assign) id<ShowViewDelegate, MainViewDelegate, ShowSchedulingDelegate> delegate;
 
 @end
 
 @protocol MainViewDelegate <NSObject>
 
 - (BOOL)isHeighStreamEnabled;
-- (void)optionsWillAppear;
+- (void)optionsWillAppearWithWidth:(CGFloat)width;
 - (void)optionsWillDisappear;
 
 @end

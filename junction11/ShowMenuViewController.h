@@ -11,7 +11,7 @@
 
 @interface ShowMenuViewController : UIViewController
 
-@property (nonatomic, assign) id<ShowViewDelegate> delegate;
+@property (nonatomic, assign) id<ShowViewDelegate, ShowSchedulingDelegate> delegate;
 @property (nonatomic, assign) id<ShowDataSource> dataSource;
 
 @end

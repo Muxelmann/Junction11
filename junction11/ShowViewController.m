@@ -27,8 +27,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    NSLog(@"Show checks notifications:[%@]", ([self.delegate areNotificationsEnabled]) ? @"YES" : @"NO");
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -74,7 +72,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *CellIdentifier;
-    
+    BOOL userInteraction = NO;
     switch (indexPath.section) {
         case 0: // Standard
             switch (indexPath.row) {
@@ -92,15 +90,19 @@
                 CellIdentifier = @"notifyCell";
             else
                 CellIdentifier = @"linkCell";
+            userInteraction = YES;
             break;
         case 2:
             CellIdentifier = @"linkCell";
+            userInteraction = YES;
             break;
         default:
             break;
     }
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    
+    cell.userInteractionEnabled = userInteraction;
     
     // Configure the cell...
     
@@ -127,13 +129,39 @@
     
     UILabel *linkLabel = (UILabel *)[cell viewWithTag:4];
     if (linkLabel) {
-        NSLog(@"%@", [self.dataSource showURL]);
-        linkLabel.text = [self.dataSource showURL];
+        linkLabel.text = ([self.dataSource showHasFacebookURL]) ? @"Facebook Link" : @"Link";
+        
+        UIImageView *imageView = (UIImageView *)[cell viewWithTag:6];
+        if ([self.dataSource showHasFacebookURL])
+            imageView.image = [UIImage imageNamed:@"facebookLarge.png"];
+        else
+            imageView.image = [UIImage imageNamed:@"safariIconLarge.png"];
+    }
+
+    UILabel *urlLabel = (UILabel *)[cell viewWithTag:7];
+    if (urlLabel) {
+        urlLabel.font = [UIFont italicSystemFontOfSize:15];
+        urlLabel.textColor = [UIColor grayColor];
+        urlLabel.text = [self.dataSource showURL];
+        
+        CGRect rect = urlLabel.frame;
+        rect.size.height = 18;
+        urlLabel.frame = rect;
     }
     
     UILabel *notifyLabel = (UILabel *)[cell viewWithTag:5];
     if (notifyLabel) {
-        notifyLabel.text = @"Notify Here";
+        notifyLabel.font = [UIFont boldSystemFontOfSize:20];
+        notifyLabel.textColor = [UIColor whiteColor];
+        notifyLabel.textAlignment = NSTextAlignmentCenter;
+        
+        if ([self.delegate isNotificationForTime:[self.dataSource showStartTime]]) {
+            notifyLabel.text = @"Stop reminding me...";
+            cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"redButton.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
+        } else {
+            notifyLabel.text = @"Remind me...";
+            cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"greenButton.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
+        }
     }
     
     return cell;
@@ -210,6 +238,29 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    if ([cell.reuseIdentifier isEqualToString:@"notifyCell"]) {
+        NSDate *time = [self.dataSource showStartTime];
+        UILabel *notifyLabel = (UILabel *)[cell viewWithTag:5];
+        
+        if ([self.delegate isNotificationForTime:time]) {
+            
+            [self.delegate unscheduleNotificationForTime:time];
+            notifyLabel.text = @"Remind me...";
+            cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"greenButton.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
+            
+        } else {
+            
+            [self.delegate scheduleNotificationFor:self.dataSource];
+            notifyLabel.text = @"Stop reminding me...";
+            cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"redButton.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
+            
+        }
+    }
+    
+    cell.selected = NO;
+    
     // Navigation logic may go here. Create and push another view controller.
     /*
      <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];

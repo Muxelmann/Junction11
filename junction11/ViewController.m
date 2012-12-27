@@ -16,6 +16,8 @@
 @property BOOL heighStream;
 @property BOOL notifications;
 
+@property (strong, nonatomic) NSMutableArray *notificationsArray;
+
 - (void)didReceiveMemoryWarning;
 
 @end
@@ -25,6 +27,7 @@
 @synthesize options = _options;
 @synthesize heighStream = _heighStream;
 @synthesize notifications = _notifications;
+@synthesize notificationsArray = _notificationsArray;
 
 - (void)viewDidLoad
 {
@@ -38,8 +41,7 @@
     self.options.delegate = self;
     self.main.delegate = self;
     
-    self.notifications = YES;
-    self.heighStream = YES;
+    [self loadData];
     
     // Make the main and options panel a child view controller
     [self addChildViewController:self.main];
@@ -63,6 +65,52 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark User Defaults
+
+- (void)saveData
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    // Stream Quality
+    NSNumber *heighStream = [[NSNumber alloc] initWithBool:self.heighStream];
+    [defaults setObject:heighStream forKey:@"stream"];
+    
+    // Notifications Enabled
+    NSNumber *notifications = [[NSNumber alloc] initWithBool:self.notifications];
+    [defaults setObject:notifications forKey:@"notifications"];
+    
+    // Notifications Array
+    [defaults setObject:[self.notificationsArray copy] forKey:@"notificationsArray"];
+    
+    [defaults synchronize];
+    NSLog(@"Data saved [%i, %i]", self.heighStream, self.notifications);
+}
+
+- (void)loadData
+{
+    // Get the stored data before the view loads
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *notifications = [defaults objectForKey:@"notifications"];
+    if (notifications)
+        self.notifications = [notifications boolValue];
+    else
+        self.notifications = YES;
+    
+    NSNumber *heighStream = [defaults objectForKey:@"stream"];
+    if (heighStream)
+        self.heighStream = [heighStream boolValue];
+    else
+        self.heighStream = YES;
+    
+    NSArray *notificationsArray = [defaults objectForKey:@"notificationsArray"];
+    if (notificationsArray)
+        self.notificationsArray = [notificationsArray mutableCopy];
+    else
+        self.notificationsArray = [[NSMutableArray alloc] init];
+    
+    NSLog(@"Data loaded [%i, %i]", self.heighStream, self.notifications);
+}
+
 #pragma mark ShowViewDelegate
 
 - (BOOL)areNotificationsEnabled
@@ -79,8 +127,14 @@
 
 #pragma mark MainViewDelegate
 
-- (void)optionsWillAppear
+- (void)optionsWillAppearWithWidth:(CGFloat)width
 {
+//    CGRect frameRect = self.options.view.frame;
+//    frameRect.size.width = width;
+//    frameRect.origin = CGPointMake(0, 0);
+//    self.options.view.frame = frameRect;
+    
+    [self.options setWidth:width];
     [self.options viewWillAppear:YES];
 }
 
@@ -95,12 +149,88 @@
 {
     NSLog(@"STREAM CHANGED! [%@]", (isEnabled) ? @"YES" : @"NO");
     self.heighStream = isEnabled;
+    [self saveData];
 }
 
 - (void)setNotificationsEnabled:(bool)isEnabled
 {
     NSLog(@"NOTIFICATIONS CHANGED! [%@]", (isEnabled) ? @"YES" : @"NO");
     self.notifications = isEnabled;
+    [self saveData];
+}
+
+
+#pragma mark ShowSchedulingDelegate
+
+- (BOOL)isNotificationForTime:(NSDate *)time
+{
+    if (!self.notifications)
+        return NO;
+    
+    if ([self.notificationsArray count] == 0)
+        return NO;
+    
+    NSEnumerator *enumerator = [self.notificationsArray objectEnumerator];
+    id object;
+    
+    while (object = [enumerator nextObject]) {
+        if ([object isKindOfClass:[UILocalNotification class]]) {
+            UILocalNotification *notification = (UILocalNotification *)object;
+            
+            NSDate* timeObject = [notification.userInfo objectForKey:@"time"];
+            
+            if ([timeObject isEqualToDate:time]) {
+                NSLog(@"Notification found");
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+
+
+- (void)scheduleNotificationFor:(id<ShowDataSource>)dataSource
+{
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    notification.fireDate = [dataSource showNotify];
+    notification.timeZone = [NSTimeZone defaultTimeZone];
+    notification.alertBody = [[dataSource showTitle] stringByAppendingString:@" will begin shortly"];
+    notification.alertAction = @"Start Listening";
+    notification.soundName = UILocalNotificationDefaultSoundName;
+
+    
+    NSArray *userInfoKeys = [[NSArray alloc] initWithObjects: @"title", @"time", nil];
+    NSArray *userInfoObjects = [[NSArray alloc] initWithObjects:[dataSource showTitle], [dataSource showStartTime], nil];
+    NSDictionary *userInfo = [[NSDictionary alloc] initWithObjects:userInfoObjects forKeys:userInfoKeys];
+    
+    notification.userInfo = userInfo;
+    
+    [self.notificationsArray addObject:notification];
+    
+    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+}
+
+- (BOOL)unscheduleNotificationForTime:(NSDate*)time
+{
+    NSEnumerator *enumerator = [self.notificationsArray objectEnumerator];
+    id object;
+    
+    while (object = [enumerator nextObject]) {
+        if ([object isKindOfClass:[UILocalNotification class]]) {
+            UILocalNotification *notification = (UILocalNotification *)object;
+            
+            NSDate* timeObject = [notification.userInfo objectForKey:@"time"];
+            
+            if ([timeObject isEqualToDate:time]) {
+                [[UIApplication sharedApplication] cancelLocalNotification:notification];
+                [self.notificationsArray removeObject:object];
+                NSLog(@"Notification canceled");
+                return YES;
+            }
+        }
+    }
+    return NO;
 }
 
 @end

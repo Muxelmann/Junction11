@@ -12,6 +12,6 @@
 
 @interface ScheduleViewController : UITableViewController <ShowDataSource>
 
-@property (nonatomic, assign) id<ShowViewDelegate> delegate;
+@property (nonatomic, assign) id<ShowViewDelegate, ShowSchedulingDelegate> delegate;
 
 @end

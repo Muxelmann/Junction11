@@ -11,7 +11,6 @@
 @interface ScheduleViewController ()
 @property (strong, nonatomic) Schedule *schedule;
 @property (strong, nonatomic) ShowMenuViewController *show;
-@property (strong, nonatomic) NSThread *updateSchedule;
 @property (strong, nonatomic) NSIndexPath *selectedIndex;
 @end
 
@@ -19,7 +18,6 @@
 @synthesize delegate = _delegate;
 @synthesize schedule = _schedule;
 @synthesize show = _show;
-@synthesize updateSchedule = _updateSchedule;
 @synthesize selectedIndex = _selectedIndex;
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -37,7 +35,6 @@
 //    self.show = [self.storyboard instantiateViewControllerWithIdentifier:@"showMenuViewControllerID"];
 //    self.show.view.backgroundColor = [UIColor redColor];
 //    self.show.delegate = self;
-    
     [self updateShows];
     
     // Uncomment the following line to preserve selection between presentations.
@@ -97,12 +94,24 @@
 {
 //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    
-    return [self.schedule numberOfShowsPerDay:section];
+        return [self.schedule numberOfShowsPerDay:section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (!self.schedule.scheduleHasLoaded) {
+        static NSString *CellIdentifier = @"loadingCell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        cell.userInteractionEnabled = NO;
+        
+        UIActivityIndicatorView *loading = (UIActivityIndicatorView *)[cell viewWithTag:4];
+        loading.hidden = NO;
+        loading.hidesWhenStopped = YES;
+        [loading startAnimating];
+        
+        return cell;
+    }
+    
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
@@ -114,9 +123,14 @@
     NSInteger day = indexPath.section;
     titleLabel.text = [self.schedule titleForShow:show onDay:day];
     infoLabel.text = [self.schedule infoForShow:show onDay:day];
-    socialImage.hidden = ![self.schedule isLinkWithShow:show onDay:day];
-    
-    // Configure the cell...
+    BOOL hasLink = [self.schedule isLinkWithShow:show onDay:day];
+    socialImage.hidden = !hasLink;
+    if (hasLink) {
+        if ([self.schedule isFacebookLinkWithShow:show onDay:day])
+            socialImage.image = [UIImage imageNamed:@"facebook.png"];
+        else
+            socialImage.image = [UIImage imageNamed:@"safariIcon.png"];
+    }
     
     return cell;
 }
@@ -188,19 +202,27 @@
 
 - (void)updateShows
 {
-    if (!self.updateSchedule.isExecuting) {
+    double delayInSeconds = .5;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        // code to be executed on main thread.If you want to run in another thread, create other queue
         
-        self.updateSchedule = [[NSThread alloc] initWithTarget:self selector:@selector(updateShowsThread) object:nil];
-        [self.updateSchedule start];
-    }
+        [self.schedule update];
+        if ([self.view isKindOfClass:[UITableView class]]) {
+            
+            UITableView *table = (UITableView *)self.view;
+            
+            NSRange range = NSMakeRange(0,table.numberOfSections);
+            NSIndexSet *index = [NSIndexSet indexSetWithIndexesInRange:range];
+            [table reloadSections:index withRowAnimation:UITableViewRowAnimationBottom];
+            
+//            [table reloadData];
+            
+        }
+    });
+    
 }
 
-- (void)updateShowsThread
-{
-    [self.schedule update];
-    if ([self.view isKindOfClass:[UITableView class]])
-        [(UITableView *)self.view reloadData];
-}
 
 #pragma mark ShowDataSource
 
@@ -212,6 +234,11 @@
 - (BOOL)showHasURL
 {
     return [self.schedule isLinkWithShow:self.selectedIndex.row onDay:self.selectedIndex.section];
+}
+
+- (BOOL)showHasFacebookURL
+{
+    return [self.schedule isFacebookLinkWithShow:self.selectedIndex.row onDay:self.selectedIndex.section];
 }
 
 - (NSString *)showInfo
@@ -227,6 +254,16 @@
 - (NSString *)showURL
 {
     return [self.schedule urlForShow:self.selectedIndex.row onDay:self.selectedIndex.section];
+}
+
+- (NSDate *)showNotify
+{
+    return [self.schedule notifyTimeOfMinutes:5 beforeShow:self.selectedIndex.row onDay:self.selectedIndex.section];
+}
+
+- (NSDate *)showStartTime
+{
+    return [self.schedule startingTimeOfShow:self.selectedIndex.row onDay:self.selectedIndex.section];
 }
 
 @end

@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "OptionsViewController.h"
+#import "MainViewController.h"
 
 @interface OptionsMenuViewController : UIViewController
 
-@property (nonatomic, assign) id<OptionViewDelegate> delegate;
+@property (nonatomic, assign) id<OptionViewDelegate, MainViewDelegate> delegate;
+
+- (void)setWidth:(CGFloat)width;
 
 @end

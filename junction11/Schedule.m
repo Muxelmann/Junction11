@@ -10,12 +10,14 @@
 
 @interface Schedule ()
 @property (strong, nonatomic) NSMutableArray *schedule;
-@property (nonatomic) NSCalendar *gregorian;
+@property (strong, nonatomic) NSCalendar *gregorian;
+@property (nonatomic) BOOL scheduleHasLoaded;
 @end
 
 @implementation Schedule
 @synthesize schedule = _schedule;
 @synthesize gregorian = _gregorian;
+@synthesize scheduleHasLoaded = _scheduleHasLoaded;
 
 - (id)init
 {
@@ -24,6 +26,7 @@
         // Initialisation code where the schedule is filled wish shows
         self.schedule = [[NSMutableArray alloc] init];
         self.gregorian = [NSCalendar currentCalendar];
+        self.scheduleHasLoaded = NO;
     }
     return self;
 }
@@ -43,6 +46,13 @@
     scheduleString = [scheduleString stringByReplacingOccurrencesOfString:@"\\" withString:@""];
     scheduleString = [scheduleString stringByReplacingOccurrencesOfString:@"\n" withString:@""];
     scheduleString = [scheduleString stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+    scheduleString = [scheduleString stringByReplacingOccurrencesOfString:@"&amp;" withString:@"&"];
+    scheduleString = [scheduleString stringByReplacingOccurrencesOfString:@"&lt;" withString:@"<"];
+    scheduleString = [scheduleString stringByReplacingOccurrencesOfString:@"&gt;" withString:@">"];
+    scheduleString = [scheduleString stringByReplacingOccurrencesOfString:@"<h1>" withString:@""];
+    scheduleString = [scheduleString stringByReplacingOccurrencesOfString:@"<h2>" withString:@""];
+    scheduleString = [scheduleString stringByReplacingOccurrencesOfString:@"</h1>" withString:@"\n\n"];
+    scheduleString = [scheduleString stringByReplacingOccurrencesOfString:@"</h2>" withString:@"\n"];
     
     //    NSLog(@"DATA: %@", schedule);
     
@@ -110,17 +120,25 @@
         
     }
     
+    self.scheduleHasLoaded = YES;
+    
 //    NSLog(@"Schedule:\n%@", self.schedule);
 }
 
 - (NSInteger)numberOfDaysInSchedule
 {
+//    if (!self.scheduleHasLoaded)
+//        return 1;
+    
     // The week always has 7 days
     return 7;
 }
 
 - (NSString *)nameForDay:(NSInteger)day
 {
+    if (!self.scheduleHasLoaded)
+        return @"Loading...";
+    
     day += self.gregorian.firstWeekday;
     day = (day > 7) ? day - 7 : day;
     switch (day) {
@@ -139,11 +157,14 @@
         case 7:
             return @"Saturday";
     }
-    return @"Unkown day";
+    return @"Next day";
 }
 
 - (NSInteger)numberOfShowsPerDay:(NSInteger)day
 {
+    if (!self.scheduleHasLoaded)
+        return 1;
+    
     NSInteger showCounter = 0;
     day += self.gregorian.firstWeekday;
     day = (day > 7) ? day - 7 : day;
@@ -178,50 +199,106 @@
     return @"Title not found";
 }
 
-- (NSString *)infoForShow:(NSInteger)show onDay:(NSInteger)day
+- (NSDate *)startingTimeOfShow:(NSInteger)show onDay:(NSInteger)day
 {
     NSInteger numberOfPastShows = [self numberOfShowsBefore:show onDay:day];
-        
+    
     float time = [[[self.schedule objectAtIndex:numberOfPastShows+show] objectForKey:@"<time>"] floatValue];
-    float duration = [[[self.schedule objectAtIndex:numberOfPastShows+show] objectForKey:@"<duration>"] floatValue];
     
     // Compute now and the calendar used
     NSDate *nowDate = [NSDate date];
-//    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-//    NSCalendar *gregorian = [NSCalendar currentCalendar];
+    //    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    //    NSCalendar *gregorian = [NSCalendar currentCalendar];
     
     // Get the weekday component of the current date
     NSDateComponents *now = [self.gregorian components:NSWeekdayCalendarUnit fromDate:nowDate];
     
     // Find out how many components differ between the beginning and now
     NSDateComponents *differenceToBeginningOfWeek = [[NSDateComponents alloc] init];
-//    [differenceToBeginningOfWeek setDay: - ([now weekday] - [gregorian firstWeekday])];
+    //    [differenceToBeginningOfWeek setDay: - ([now weekday] - [gregorian firstWeekday])];
     differenceToBeginningOfWeek.day = - ([now weekday] - [self.gregorian firstWeekday]);
     
     // Compute the beginning of the week and normalise time to zero.
     NSDate *beginningOfWeek = [self.gregorian dateByAddingComponents:differenceToBeginningOfWeek toDate:nowDate options:0];
     NSDateComponents *components = [self.gregorian components: (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
-                                                fromDate: beginningOfWeek];
+                                                     fromDate: beginningOfWeek];
     beginningOfWeek = [self.gregorian dateFromComponents: components];
-            
+    
     NSDateComponents *startDifference = [[NSDateComponents alloc] init];
-//    startDifference.hour = (NSInteger)time;
-
+    //    startDifference.hour = (NSInteger)time;
+    
     startDifference.minute = time * 60;
     startDifference.day = day;
-
-    NSDate *start = [self.gregorian dateByAddingComponents:startDifference toDate:beginningOfWeek options:0];
     
-//    NSLog(@"START %@", start);
+    return [self.gregorian dateByAddingComponents:startDifference toDate:beginningOfWeek options:0];
+
+}
+
+- (NSDate *)endingTimeOfShow:(NSInteger)show onDay:(NSInteger)day
+{
+    NSInteger numberOfPastShows = [self numberOfShowsBefore:show onDay:day];
+    
+    NSDate *start = [self startingTimeOfShow:show onDay:day];
+    
+    float duration = [[[self.schedule objectAtIndex:numberOfPastShows+show] objectForKey:@"<duration>"] floatValue];
     
     NSDateComponents *endDifference = [[NSDateComponents alloc] init];
     
-//    endDifference.hour = (NSInteger)duration;
+    //    endDifference.hour = (NSInteger)duration;
     endDifference.minute = duration * 60;
     
-    NSDate *end = [self.gregorian dateByAddingComponents:endDifference toDate:start options:0];
+    return [self.gregorian dateByAddingComponents:endDifference toDate:start options:0];
+}
 
+- (NSString *)infoForShow:(NSInteger)show onDay:(NSInteger)day
+{
+//    NSInteger numberOfPastShows = [self numberOfShowsBefore:show onDay:day];
+    
+//    float time = [[[self.schedule objectAtIndex:numberOfPastShows+show] objectForKey:@"<time>"] floatValue];
+//    float duration = [[[self.schedule objectAtIndex:numberOfPastShows+show] objectForKey:@"<duration>"] floatValue];
+//    
+//    // Compute now and the calendar used
+//    NSDate *nowDate = [NSDate date];
+////    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+////    NSCalendar *gregorian = [NSCalendar currentCalendar];
+//    
+//    // Get the weekday component of the current date
+//    NSDateComponents *now = [self.gregorian components:NSWeekdayCalendarUnit fromDate:nowDate];
+//    
+//    // Find out how many components differ between the beginning and now
+//    NSDateComponents *differenceToBeginningOfWeek = [[NSDateComponents alloc] init];
+////    [differenceToBeginningOfWeek setDay: - ([now weekday] - [gregorian firstWeekday])];
+//    differenceToBeginningOfWeek.day = - ([now weekday] - [self.gregorian firstWeekday]);
+//    
+//    // Compute the beginning of the week and normalise time to zero.
+//    NSDate *beginningOfWeek = [self.gregorian dateByAddingComponents:differenceToBeginningOfWeek toDate:nowDate options:0];
+//    NSDateComponents *components = [self.gregorian components: (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
+//                                                fromDate: beginningOfWeek];
+//    beginningOfWeek = [self.gregorian dateFromComponents: components];
+//            
+//    NSDateComponents *startDifference = [[NSDateComponents alloc] init];
+////    startDifference.hour = (NSInteger)time;
+//
+//    startDifference.minute = time * 60;
+//    startDifference.day = day;
+//
+//    NSDate *start = [self.gregorian dateByAddingComponents:startDifference toDate:beginningOfWeek options:0];
+
+//    NSDate *start = [self startingTimeOfShow:show onDay:day];
+    
+//    NSLog(@"START %@", start);
+    
+//    NSDateComponents *endDifference = [[NSDateComponents alloc] init];
+//    
+////    endDifference.hour = (NSInteger)duration;
+//    endDifference.minute = duration * 60;
+//    
+//    NSDate *end = [self.gregorian dateByAddingComponents:endDifference toDate:start options:0];
+    
 //    NSLog(@"END %@\n", endDifference);
+    
+    NSDate *start = [self startingTimeOfShow:show onDay:day];
+    NSDate *end = [self endingTimeOfShow:show onDay:day];
     
     NSString *returnString = [[NSString alloc] init];
 //    returnString = [returnString stringByAppendingString:[NSDateFormatter localizedStringFromDate:start dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle]];
@@ -254,6 +331,19 @@
     return ![url isEqualToString:@""];
 }
 
+- (BOOL)isFacebookLinkWithShow:(NSInteger)show onDay:(NSInteger)day
+{
+    if ([self isLinkWithShow:show onDay:day]) {
+        NSInteger numberOfPastShows = [self numberOfShowsBefore:show onDay:day];
+        
+        NSString *url = [[self.schedule objectAtIndex:numberOfPastShows+show] objectForKey:@"<url>"];
+        //    NSLog(@"URL = %i", [url isEqualToString:@""]);
+        return ([url rangeOfString:@"facebook"].location != NSNotFound);
+    }
+    return NO;
+}
+
+
 - (NSString *)urlForShow:(NSInteger)show onDay:(NSInteger)day
 {
     NSInteger numberOfPastShows = [self numberOfShowsBefore:show onDay:day];
@@ -278,6 +368,16 @@
     numberOfPastShows = (numberOfPastShows < [self.schedule count]) ? numberOfPastShows : numberOfPastShows - [self.schedule count];
     
     return numberOfPastShows;
+}
+
+- (NSDate *)notifyTimeOfMinutes:(NSInteger)minutes beforeShow:(NSInteger)show onDay:(NSInteger)day
+{   
+    NSDate *start = [self startingTimeOfShow:show onDay:day];
+    
+    NSDateComponents *differenceToNotification = [[NSDateComponents alloc] init];
+    differenceToNotification.minute = -minutes;
+    
+    return [self.gregorian dateByAddingComponents:differenceToNotification toDate:start options:0];
 }
 
 @end
