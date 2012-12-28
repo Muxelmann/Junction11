@@ -8,12 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
+#import "NotificationNavigationController.h"
 
 @protocol OptionViewDelegate;
 
-@interface OptionsViewController : UITableViewController
+@interface OptionsViewController : UITableViewController <NotidicationButtonDelegate>
 
-@property (nonatomic, assign) id<OptionViewDelegate> delegate;
+@property (nonatomic, assign) id<OptionViewDelegate, ManageNotificationsDelegate> delegate;
+
+- (void)updateNotificationButton;
 
 @end
 
@@ -23,5 +26,6 @@
 - (BOOL)isHeighStreamEnabled;
 - (void)setHeighStreamEnabled:(bool)isEnabled;
 - (void)setNotificationsEnabled:(bool)isEnabled;
+- (NSInteger)numberOfNotifications;
 
 @end

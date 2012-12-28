@@ -16,6 +16,7 @@
 @property BOOL heighStream;
 @property BOOL notifications;
 
+@property (strong, nonatomic) Schedule *schedule;
 @property (strong, nonatomic) NSMutableArray *notificationsArray;
 
 - (void)didReceiveMemoryWarning;
@@ -40,6 +41,7 @@
     // Set self as options delegate, so that data change is received
     self.options.delegate = self;
     self.main.delegate = self;
+    self.main.schedule = self.schedule;
     
     [self loadData];
     
@@ -65,6 +67,14 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (Schedule *)schedule
+{
+    if (!_schedule) {
+        _schedule = [[Schedule alloc] init];
+    }
+    return _schedule;
+}
+
 #pragma mark User Defaults
 
 - (void)saveData
@@ -80,7 +90,8 @@
     [defaults setObject:notifications forKey:@"notifications"];
     
     // Notifications Array
-    [defaults setObject:[self.notificationsArray copy] forKey:@"notificationsArray"];
+    [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:self.notificationsArray] forKey:@"notificationsArray"];
+//    [defaults setObject:[self.notificationsArray copy] forKey:@"notificationsArray"];
     
     [defaults synchronize];
     NSLog(@"Data saved [%i, %i]", self.heighStream, self.notifications);
@@ -102,27 +113,16 @@
     else
         self.heighStream = YES;
     
-    NSArray *notificationsArray = [defaults objectForKey:@"notificationsArray"];
+    NSData *notificationsArray = [defaults objectForKey:@"notificationsArray"];
     if (notificationsArray)
-        self.notificationsArray = [notificationsArray mutableCopy];
-    else
+        self.notificationsArray = [NSKeyedUnarchiver unarchiveObjectWithData:notificationsArray];
+//    else
+//        self.notificationsArray = [[NSMutableArray alloc] init];
+    
+    if (![self.notificationsArray isKindOfClass:[NSMutableArray class]])
         self.notificationsArray = [[NSMutableArray alloc] init];
     
     NSLog(@"Data loaded [%i, %i]", self.heighStream, self.notifications);
-}
-
-#pragma mark ShowViewDelegate
-
-- (BOOL)areNotificationsEnabled
-{
-    NSLog(@"NOTIFICATIONS CHECK! [%@]", (self.notifications) ? @"YES" : @"NO");
-    return self.notifications;
-}
-
-- (BOOL)isHeighStreamEnabled
-{
-    NSLog(@"HEIGH STREAM CHECK! [%@]", (self.heighStream) ? @"YES" : @"NO");
-    return self.heighStream;
 }
 
 #pragma mark MainViewDelegate
@@ -159,6 +159,39 @@
     [self saveData];
 }
 
+- (NSInteger)numberOfNotifications
+{
+    return [self.notificationsArray count];
+}
+
+#pragma mark ManageNotificationsDelegate
+
+
+- (NSDate *)timeForNotificationAtIndex:(NSInteger)index
+{
+    UILocalNotification *notification = [self.notificationsArray objectAtIndex:index];
+    return [notification.userInfo objectForKey:@"time"];
+}
+
+- (NSString *)titleForNotificationAtIndex:(NSInteger)index
+{
+    UILocalNotification *notification = [self.notificationsArray objectAtIndex:index];
+    return [notification.userInfo objectForKey:@"title"];
+}
+
+#pragma mark ShowViewDelegate
+
+- (BOOL)areNotificationsEnabled
+{
+    NSLog(@"NOTIFICATIONS CHECK! [%@]", (self.notifications) ? @"YES" : @"NO");
+    return self.notifications;
+}
+
+- (BOOL)isHeighStreamEnabled
+{
+    NSLog(@"HEIGH STREAM CHECK! [%@]", (self.heighStream) ? @"YES" : @"NO");
+    return self.heighStream;
+}
 
 #pragma mark ShowSchedulingDelegate
 
@@ -206,9 +239,14 @@
     
     notification.userInfo = userInfo;
     
+    notification.repeatInterval = NSWeekCalendarUnit;
+    
     [self.notificationsArray addObject:notification];
     
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    [self saveData];
+    
+    NSLog(@"Notification scheduled [%i]", [self.notificationsArray count]);
 }
 
 - (BOOL)unscheduleNotificationForTime:(NSDate*)time
@@ -225,7 +263,8 @@
             if ([timeObject isEqualToDate:time]) {
                 [[UIApplication sharedApplication] cancelLocalNotification:notification];
                 [self.notificationsArray removeObject:object];
-                NSLog(@"Notification canceled");
+                [self saveData];
+                NSLog(@"Notification canceled [%i]", [self.notificationsArray count]);
                 return YES;
             }
         }

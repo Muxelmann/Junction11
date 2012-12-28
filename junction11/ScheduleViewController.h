@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Schedule.h"
-#import "ShowMenuViewController.h"
+#import "ShowViewController.h"
+#import "ScheduleDataSource.h"
 
 @interface ScheduleViewController : UITableViewController <ShowDataSource>
 
 @property (nonatomic, assign) id<ShowViewDelegate, ShowSchedulingDelegate> delegate;
+@property (nonatomic, assign) id<ScheduleDataSource> schedule;
 
 @end

@@ -12,7 +12,7 @@
 
 @interface OptionsMenuViewController : UIViewController
 
-@property (nonatomic, assign) id<OptionViewDelegate, MainViewDelegate> delegate;
+@property (nonatomic, assign) id<OptionViewDelegate, MainViewDelegate, ManageNotificationsDelegate, ScheduleDataSource> delegate;
 
 - (void)setWidth:(CGFloat)width;
 

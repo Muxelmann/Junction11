@@ -15,15 +15,22 @@
 @property (weak, nonatomic) IBOutlet UITextView *descriptionBox;
 @property (weak, nonatomic) IBOutlet UISwitch *highQualitySwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *notoficationsSwitch;
+@property (weak, nonatomic) IBOutlet UITableViewCell *manageNotifications;
+@property (weak, nonatomic) IBOutlet UILabel *manageNotificationsLabel;
 
 @property (strong, nonatomic) NSThread *updateImage;
 
 @end
 
 @implementation OptionsViewController
+@synthesize delegate = _delegate;
+@synthesize webcam = _webcam;
+@synthesize loadingWebcam = _loadingWebcam;
+@synthesize descriptionBox = _descriptionBox;
 @synthesize highQualitySwitch = _highQualitySwitch;
 @synthesize notoficationsSwitch = _notoficationsSwitch;
-@synthesize delegate = _delegate;
+@synthesize manageNotifications = _manageNotifications;
+@synthesize manageNotificationsLabel = _manageNotificationsLabel;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -44,8 +51,16 @@
     self.loadingWebcam.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
     self.loadingWebcam.backgroundColor = [UIColor clearColor];
     
-    [self.highQualitySwitch setOn:[self.delegate isHeighStreamEnabled] animated:YES];
-    [self.notoficationsSwitch setOn:[self.delegate areNotificationsEnabled] animated:YES];
+    self.highQualitySwitch.on = [self.delegate isHeighStreamEnabled];
+//    [self.highQualitySwitch setOn:[self.delegate isHeighStreamEnabled] animated:YES];
+    self.notoficationsSwitch.on = [self.delegate areNotificationsEnabled];
+//    [self.notoficationsSwitch setOn:[self.delegate areNotificationsEnabled] animated:YES];
+    
+    [self updateNotificationButton];
+    
+    self.manageNotificationsLabel.font = [UIFont boldSystemFontOfSize:20];
+    self.manageNotificationsLabel.textColor = [UIColor whiteColor];
+    self.manageNotificationsLabel.textAlignment = NSTextAlignmentCenter;
     
     if ([self.view isKindOfClass:[UITableView class]]) {
 
@@ -81,6 +96,8 @@
     
     [(UITableView *)self.view reloadData];
     
+    [self updateNotificationButton];
+    
 //    CGRect rect = self.webcam.frame;
 //    rect.size = CGSizeMake(self.view.bounds.size.height-2, self.view.bounds.size.width-2);
 //    self.webcam.frame = rect;
@@ -99,16 +116,8 @@
         default:
             break;
     }
-}
-
-- (BOOL)isInHighStream
-{
-    return self.highQualitySwitch.isOn;
-}
-
-- (BOOL)areNotificationsEnabled
-{
-    return self.notoficationsSwitch.isOn;
+    
+    [self updateNotificationButton];
 }
 
 - (void)didReceiveMemoryWarning
@@ -266,7 +275,7 @@
      // Pass the selected object to the new view controller.
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
-    
+ 
     if (indexPath.section == 1 && indexPath.row == 0) {
         [self updateWebcam];
     }
@@ -308,11 +317,51 @@
     // Apply image to background
     self.webcam.contentMode = UIViewContentModeScaleToFill;// = UIViewContentModeCenter;
     self.webcam.image = webcamImageRaw;
-    NSLog(@"WEBCAM %f", self.webcam.frame.size.width);
     
     // Stop the activity indicator
     self.webcam.hidden = NO;
     [self.loadingWebcam stopAnimating];
 }
 
+- (void)updateNotificationButton
+{
+    if (!self.notoficationsSwitch.on || [self.delegate numberOfNotifications] < 1) {
+        self.manageNotifications.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"whiteButton.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
+        self.manageNotifications.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"whiteButtonSelected.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
+        self.manageNotifications.userInteractionEnabled = NO;
+    } else {
+        self.manageNotifications.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"greenButton.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
+        self.manageNotifications.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"greenButtonSelected.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
+        self.manageNotifications.userInteractionEnabled = YES;
+    }
+    
+    if (!self.notoficationsSwitch.on) {
+        self.manageNotificationsLabel.text = @"Reminders off";
+    } else if ([self.delegate numberOfNotifications] <= 0) {
+        self.manageNotificationsLabel.text = @"No reminders";
+    } else if ([self.delegate numberOfNotifications] == 1){
+        self.manageNotificationsLabel.text = [NSString stringWithFormat:@"%i reminder", [self.delegate numberOfNotifications]];
+    } else {
+        self.manageNotificationsLabel.text = [NSString stringWithFormat:@"%i reminders", [self.delegate numberOfNotifications]];
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"showNotifications"]) {
+        self.manageNotifications.selected = NO;
+        if ([segue.destinationViewController isKindOfClass:[NotificationNavigationController class]]) {
+            NotificationNavigationController *viewController = (NotificationNavigationController *)segue.destinationViewController;
+            viewController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+            viewController.notificationsDelegate = self.delegate;
+            viewController.button = self;
+            
+            
+            if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
+                UIStoryboardPopoverSegue *popover = (UIStoryboardPopoverSegue *)segue;
+                viewController.popover = popover.popoverController;
+            }
+        }
+    }
+}
 @end

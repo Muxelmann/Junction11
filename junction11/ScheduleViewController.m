@@ -9,8 +9,7 @@
 #import "ScheduleViewController.h"
 
 @interface ScheduleViewController ()
-@property (strong, nonatomic) Schedule *schedule;
-@property (strong, nonatomic) ShowMenuViewController *show;
+@property (strong, nonatomic) ShowViewController *show;
 @property (strong, nonatomic) NSIndexPath *selectedIndex;
 @end
 
@@ -35,7 +34,11 @@
 //    self.show = [self.storyboard instantiateViewControllerWithIdentifier:@"showMenuViewControllerID"];
 //    self.show.view.backgroundColor = [UIColor redColor];
 //    self.show.delegate = self;
-    [self updateShows];
+    
+    self.title = @"Schedule";
+    
+    if (![self.schedule scheduleHasLoaded])
+        [self updateShows];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -43,15 +46,6 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
-
-//- (void)dealloc
-//{
-//    NSLog(@"Dealloc ScheduleViewController");
-//    _schedule = nil;
-//    _show = nil;
-//    _updateSchedule = nil;
-////    [super dealloc];
-//}
 
 - (void)didReceiveMemoryWarning
 {
@@ -62,10 +56,10 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
 //    NSLog(@"Searching Segue...");
-    if ([segue.identifier isEqualToString:@"showShows"]) {
+    if ([segue.identifier isEqualToString:@"showShow"]) {
 //        NSLog(@"showShows intercepted...");
-        if ([segue.destinationViewController isKindOfClass:[ShowMenuViewController class]]) {
-            ShowMenuViewController *viewController = segue.destinationViewController;
+        if ([segue.destinationViewController isKindOfClass:[ShowViewController class]]) {
+            ShowViewController *viewController = segue.destinationViewController;
             viewController.delegate = self.delegate;
             viewController.dataSource = self;
             
@@ -192,12 +186,11 @@
      */
 }
 
-- (Schedule *)schedule
-{
-    if (!_schedule) {
-        _schedule = [[Schedule alloc] init];
-    }
-    return _schedule;
+- (IBAction)backButtonPressed:(id)sender {
+    [self viewWillDisappear:YES];
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self removeFromParentViewController];
+    }];
 }
 
 - (void)updateShows

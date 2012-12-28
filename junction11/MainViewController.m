@@ -20,6 +20,7 @@
 @synthesize optionsButton = _optionsButton;
 @synthesize swipeGesture = _swipeGesture;
 @synthesize isOptionsVisible = _isOptionsVisible;
+@synthesize schedule = _schedule;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -47,15 +48,27 @@
 //    NSLog(@"Searching Segue...");
     if ([segue.identifier isEqualToString:@"showSchedule"]) {
 //        NSLog(@"showSchedule intercepted...");
-        if ([segue.destinationViewController isKindOfClass:[ScheduleMenuViewController class]]) {
-            ((ScheduleMenuViewController *)segue.destinationViewController).delegate = self.delegate;
+
+        if ([segue.destinationViewController isKindOfClass:[ScheduleNavigationController class]]) {
+            ScheduleNavigationController *navigationController = (ScheduleNavigationController *)segue.destinationViewController;
+            navigationController.scheduleDelegate = self.delegate;
+            navigationController.schedule = self.schedule;
+            
+            if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]]) {
+                if ([sender isKindOfClass:[UIBarButtonItem class]]) {
+                    ((UIBarButtonItem *)sender).enabled = NO;
+                    navigationController.popoverButton = (UIBarButtonItem *)sender;
+                }
+            }
+            
         }
-    } else if ([segue.identifier isEqualToString:@"showSchedulePopover"]) {
         
-        if ([segue.destinationViewController isKindOfClass:[ScheduleMenuViewController class]]) {
-            ((ScheduleMenuViewController *)segue.destinationViewController).delegate = self.delegate;
+    }/* else if ([segue.identifier isEqualToString:@"showSchedule"]) {
+        
+        if ([segue.destinationViewController isKindOfClass:[ScheduleNavigationController class]]) {
+            ((ScheduleNavigationController *)segue.destinationViewController).scheduleDelegate = self.delegate;
         }
-    }
+    }*/
 }
 
 - (void)didReceiveMemoryWarning

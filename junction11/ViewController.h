@@ -10,8 +10,9 @@
 #import "OptionsMenuViewController.h"
 #import "OptionsViewController.h"
 #import "MainViewController.h"
+#import "Schedule.h"
 
-@interface ViewController : UIViewController <OptionViewDelegate, MainViewDelegate, ShowViewDelegate, ShowSchedulingDelegate>
+@interface ViewController : UIViewController <OptionViewDelegate, MainViewDelegate, ShowViewDelegate, ShowSchedulingDelegate, ManageNotificationsDelegate, ScheduleDataSource>
 
 //- (void)setHeighStreamEnabled:(bool)isEnabled;
 //- (void)setNotificationsEnabled:(bool)isEnabled;

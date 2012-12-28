@@ -28,6 +28,8 @@
 {
     [super viewDidLoad];
     
+    self.title = @"Show";
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -132,6 +134,7 @@
         linkLabel.text = ([self.dataSource showHasFacebookURL]) ? @"Facebook Link" : @"Link";
         
         UIImageView *imageView = (UIImageView *)[cell viewWithTag:6];
+        
         if ([self.dataSource showHasFacebookURL])
             imageView.image = [UIImage imageNamed:@"facebookLarge.png"];
         else
@@ -140,12 +143,20 @@
 
     UILabel *urlLabel = (UILabel *)[cell viewWithTag:7];
     if (urlLabel) {
+        CGRect rect;
+        
+        rect = urlLabel.frame;
+        rect.size.width = self.view.bounds.size.width-50;
+        rect.origin.x = 15;
+        urlLabel.frame = rect;
         urlLabel.font = [UIFont italicSystemFontOfSize:15];
         urlLabel.textColor = [UIColor grayColor];
         urlLabel.text = [self.dataSource showURL];
         
-        CGRect rect = urlLabel.frame;
+        rect = urlLabel.frame;
         rect.size.height = 18;
+        rect.size.width = self.view.bounds.size.width-50;
+        rect.origin.x = 15;
         urlLabel.frame = rect;
     }
     
@@ -158,9 +169,11 @@
         if ([self.delegate isNotificationForTime:[self.dataSource showStartTime]]) {
             notifyLabel.text = @"Stop reminding me...";
             cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"redButton.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
+            cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"redButtonSelected.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
         } else {
             notifyLabel.text = @"Remind me...";
             cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"greenButton.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
+            cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"greenButtonSelected.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
         }
     }
     
@@ -183,16 +196,16 @@
             break;
         case 1: // Notification or link...
             if ([self.delegate areNotificationsEnabled])
-                return 46.0;
+                return 45.0;
             else
-                return 46.0;
+                return 45.0;
             break;
         case 2:
-            return 46.0;
+            return 45.0;
             break;
     }
     
-    return 46.0;
+    return 45.0;
 }
 
 /*

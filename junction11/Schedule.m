@@ -33,6 +33,11 @@
 
 - (void)update
 {
+    // Prevent reloading if unecessary
+    if (self.scheduleHasLoaded) return;
+    
+    [self.schedule removeAllObjects];
+    
     // Sets URL from where to load the XML data
     NSString *url = @"http://junction11.rusu.co.uk/customscripts/ios_v2.php";
     
@@ -104,6 +109,7 @@
         NSString *entry;
         
         for (NSInteger e = 0; e < [beginKey count]; e++) {
+            
             beginsRange = [entryString rangeOfString:[beginKey objectAtIndex:e]];
             endsRange = [entryString rangeOfString:[endKey objectAtIndex:e]];
             
@@ -216,7 +222,7 @@
     // Find out how many components differ between the beginning and now
     NSDateComponents *differenceToBeginningOfWeek = [[NSDateComponents alloc] init];
     //    [differenceToBeginningOfWeek setDay: - ([now weekday] - [gregorian firstWeekday])];
-    differenceToBeginningOfWeek.day = - ([now weekday] - [self.gregorian firstWeekday]);
+    differenceToBeginningOfWeek.day = - (now.weekday - self.gregorian.firstWeekday);
     
     // Compute the beginning of the week and normalise time to zero.
     NSDate *beginningOfWeek = [self.gregorian dateByAddingComponents:differenceToBeginningOfWeek toDate:nowDate options:0];
@@ -378,6 +384,11 @@
     differenceToNotification.minute = -minutes;
     
     return [self.gregorian dateByAddingComponents:differenceToNotification toDate:start options:0];
+}
+
+- (NSInteger *)beginningOfWeek
+{
+    
 }
 
 @end
