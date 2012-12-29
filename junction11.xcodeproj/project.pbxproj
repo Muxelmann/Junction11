@@ -11,11 +11,21 @@
 		541E2C1C168DE7DD00479CCF /* WebRadioStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 541E2C1B168DE7DD00479CCF /* WebRadioStream.m */; };
 		541E2C1E168DE86E00479CCF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 541E2C1D168DE86E00479CCF /* AVFoundation.framework */; };
 		541E2C20168DFBF400479CCF /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 541E2C1F168DFBF400479CCF /* bg.png */; };
-		541E2C37168E743600479CCF /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 541E2C36168E743500479CCF /* MainView.m */; };
-		543C52AF168C74120079AB2C /* redButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 543C52AD168C74120079AB2C /* redButton.png */; };
-		543C52B0168C74120079AB2C /* redButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 543C52AE168C74120079AB2C /* redButton@2x.png */; };
-		543C52B4168C7A7D0079AB2C /* greenButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 543C52B2168C7A7D0079AB2C /* greenButton.png */; };
-		543C52B5168C7A7D0079AB2C /* greenButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 543C52B3168C7A7D0079AB2C /* greenButton@2x.png */; };
+		5436B56D168F1C7300590FD9 /* Shoutbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 5436B56C168F1C7300590FD9 /* Shoutbox.m */; };
+		5436B576168F257900590FD9 /* ShoutboxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5436B575168F257900590FD9 /* ShoutboxViewController.m */; };
+		5436B579168F293F00590FD9 /* CustomButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = 5436B578168F293F00590FD9 /* CustomButtons.m */; };
+		5436B584168F3DEA00590FD9 /* green.png in Resources */ = {isa = PBXBuildFile; fileRef = 5436B582168F3DEA00590FD9 /* green.png */; };
+		5436B585168F3DEA00590FD9 /* green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5436B583168F3DEA00590FD9 /* green@2x.png */; };
+		5436B588168F3E7600590FD9 /* greenDark.png in Resources */ = {isa = PBXBuildFile; fileRef = 5436B586168F3E7500590FD9 /* greenDark.png */; };
+		5436B589168F3E7600590FD9 /* greenDark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5436B587168F3E7600590FD9 /* greenDark@2x.png */; };
+		5436B592168F3FD500590FD9 /* red.png in Resources */ = {isa = PBXBuildFile; fileRef = 5436B58A168F3FD500590FD9 /* red.png */; };
+		5436B593168F3FD500590FD9 /* red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5436B58B168F3FD500590FD9 /* red@2x.png */; };
+		5436B594168F3FD500590FD9 /* redDark.png in Resources */ = {isa = PBXBuildFile; fileRef = 5436B58C168F3FD500590FD9 /* redDark.png */; };
+		5436B595168F3FD500590FD9 /* redDark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5436B58D168F3FD500590FD9 /* redDark@2x.png */; };
+		5436B596168F3FD500590FD9 /* white.png in Resources */ = {isa = PBXBuildFile; fileRef = 5436B58E168F3FD500590FD9 /* white.png */; };
+		5436B597168F3FD500590FD9 /* white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5436B58F168F3FD500590FD9 /* white@2x.png */; };
+		5436B598168F3FD500590FD9 /* whiteDark.png in Resources */ = {isa = PBXBuildFile; fileRef = 5436B590168F3FD500590FD9 /* whiteDark.png */; };
+		5436B599168F3FD500590FD9 /* whiteDark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5436B591168F3FD500590FD9 /* whiteDark@2x.png */; };
 		543C52D3168C83780079AB2C /* safariIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 543C52CF168C83780079AB2C /* safariIcon.png */; };
 		543C52D4168C83780079AB2C /* safariIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 543C52D0168C83780079AB2C /* safariIcon@2x.png */; };
 		543C52D5168C83780079AB2C /* safariIconLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = 543C52D1168C83780079AB2C /* safariIconLarge.png */; };
@@ -37,18 +47,8 @@
 		5457349016823953006459B8 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5457348E16823953006459B8 /* MainStoryboard_iPhone.storyboard */; };
 		5457349316823953006459B8 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5457349116823953006459B8 /* MainStoryboard_iPad.storyboard */; };
 		5457349616823953006459B8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5457349516823953006459B8 /* ViewController.m */; };
-		5491736D168D222D003A60C0 /* whiteButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 5491736B168D222D003A60C0 /* whiteButton.png */; };
-		5491736E168D222D003A60C0 /* whiteButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5491736C168D222D003A60C0 /* whiteButton@2x.png */; };
 		54917372168D2561003A60C0 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54917371168D2561003A60C0 /* NotificationsViewController.m */; };
 		54917375168D28C8003A60C0 /* NotificationNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54917374168D28C8003A60C0 /* NotificationNavigationController.m */; };
-		5491737A168D33AE003A60C0 /* redBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 54917378168D33AE003A60C0 /* redBackground.png */; };
-		5491737B168D33AE003A60C0 /* redBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 54917379168D33AE003A60C0 /* redBackground@2x.png */; };
-		5491737E168D366E003A60C0 /* redButtonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 5491737C168D366E003A60C0 /* redButtonSelected.png */; };
-		5491737F168D366E003A60C0 /* redButtonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5491737D168D366E003A60C0 /* redButtonSelected@2x.png */; };
-		54917382168D3675003A60C0 /* whiteButtonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 54917380168D3675003A60C0 /* whiteButtonSelected.png */; };
-		54917383168D3675003A60C0 /* whiteButtonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 54917381168D3675003A60C0 /* whiteButtonSelected@2x.png */; };
-		54917386168D367E003A60C0 /* greenButtonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 54917384168D367E003A60C0 /* greenButtonSelected.png */; };
-		54917387168D367E003A60C0 /* greenButtonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 54917385168D367E003A60C0 /* greenButtonSelected@2x.png */; };
 		54BE4316168B103100173763 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE4315168B103100173763 /* MainViewController.m */; };
 		54BE431D168B117D00173763 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54BE431C168B117D00173763 /* OptionsViewController.m */; };
 		54BE431F168B11BF00173763 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54BE431E168B11BF00173763 /* QuartzCore.framework */; };
@@ -69,12 +69,24 @@
 		541E2C1B168DE7DD00479CCF /* WebRadioStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebRadioStream.m; sourceTree = "<group>"; };
 		541E2C1D168DE86E00479CCF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		541E2C1F168DFBF400479CCF /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
-		541E2C35168E743500479CCF /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
-		541E2C36168E743500479CCF /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
-		543C52AD168C74120079AB2C /* redButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redButton.png; sourceTree = "<group>"; };
-		543C52AE168C74120079AB2C /* redButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redButton@2x.png"; sourceTree = "<group>"; };
-		543C52B2168C7A7D0079AB2C /* greenButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greenButton.png; sourceTree = "<group>"; };
-		543C52B3168C7A7D0079AB2C /* greenButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenButton@2x.png"; sourceTree = "<group>"; };
+		5436B56B168F1C7300590FD9 /* Shoutbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shoutbox.h; sourceTree = "<group>"; };
+		5436B56C168F1C7300590FD9 /* Shoutbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Shoutbox.m; sourceTree = "<group>"; };
+		5436B574168F257800590FD9 /* ShoutboxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShoutboxViewController.h; sourceTree = "<group>"; };
+		5436B575168F257900590FD9 /* ShoutboxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShoutboxViewController.m; sourceTree = "<group>"; };
+		5436B577168F293F00590FD9 /* CustomButtons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomButtons.h; sourceTree = "<group>"; };
+		5436B578168F293F00590FD9 /* CustomButtons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomButtons.m; sourceTree = "<group>"; };
+		5436B582168F3DEA00590FD9 /* green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = green.png; sourceTree = "<group>"; };
+		5436B583168F3DEA00590FD9 /* green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "green@2x.png"; sourceTree = "<group>"; };
+		5436B586168F3E7500590FD9 /* greenDark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greenDark.png; sourceTree = "<group>"; };
+		5436B587168F3E7600590FD9 /* greenDark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenDark@2x.png"; sourceTree = "<group>"; };
+		5436B58A168F3FD500590FD9 /* red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = red.png; sourceTree = "<group>"; };
+		5436B58B168F3FD500590FD9 /* red@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "red@2x.png"; sourceTree = "<group>"; };
+		5436B58C168F3FD500590FD9 /* redDark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redDark.png; sourceTree = "<group>"; };
+		5436B58D168F3FD500590FD9 /* redDark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redDark@2x.png"; sourceTree = "<group>"; };
+		5436B58E168F3FD500590FD9 /* white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white.png; sourceTree = "<group>"; };
+		5436B58F168F3FD500590FD9 /* white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white@2x.png"; sourceTree = "<group>"; };
+		5436B590168F3FD500590FD9 /* whiteDark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteDark.png; sourceTree = "<group>"; };
+		5436B591168F3FD500590FD9 /* whiteDark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteDark@2x.png"; sourceTree = "<group>"; };
 		543C52CF168C83780079AB2C /* safariIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = safariIcon.png; sourceTree = "<group>"; };
 		543C52D0168C83780079AB2C /* safariIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "safariIcon@2x.png"; sourceTree = "<group>"; };
 		543C52D1168C83780079AB2C /* safariIconLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = safariIconLarge.png; sourceTree = "<group>"; };
@@ -103,20 +115,10 @@
 		5457349216823953006459B8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		5457349416823953006459B8 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		5457349516823953006459B8 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		5491736B168D222D003A60C0 /* whiteButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteButton.png; sourceTree = "<group>"; };
-		5491736C168D222D003A60C0 /* whiteButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteButton@2x.png"; sourceTree = "<group>"; };
 		54917370168D2561003A60C0 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsViewController.h; sourceTree = "<group>"; };
 		54917371168D2561003A60C0 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
 		54917373168D28C8003A60C0 /* NotificationNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationNavigationController.h; sourceTree = "<group>"; };
 		54917374168D28C8003A60C0 /* NotificationNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationNavigationController.m; sourceTree = "<group>"; };
-		54917378168D33AE003A60C0 /* redBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redBackground.png; sourceTree = "<group>"; };
-		54917379168D33AE003A60C0 /* redBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redBackground@2x.png"; sourceTree = "<group>"; };
-		5491737C168D366E003A60C0 /* redButtonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redButtonSelected.png; sourceTree = "<group>"; };
-		5491737D168D366E003A60C0 /* redButtonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redButtonSelected@2x.png"; sourceTree = "<group>"; };
-		54917380168D3675003A60C0 /* whiteButtonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteButtonSelected.png; sourceTree = "<group>"; };
-		54917381168D3675003A60C0 /* whiteButtonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteButtonSelected@2x.png"; sourceTree = "<group>"; };
-		54917384168D367E003A60C0 /* greenButtonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greenButtonSelected.png; sourceTree = "<group>"; };
-		54917385168D367E003A60C0 /* greenButtonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenButtonSelected@2x.png"; sourceTree = "<group>"; };
 		54BE4314168B103100173763 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		54BE4315168B103100173763 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		54BE431B168B117D00173763 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
@@ -153,27 +155,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5436B573168F256700590FD9 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				54BE4314168B103100173763 /* MainViewController.h */,
+				54BE4315168B103100173763 /* MainViewController.m */,
+				5436B574168F257800590FD9 /* ShoutboxViewController.h */,
+				5436B575168F257900590FD9 /* ShoutboxViewController.m */,
+			);
+			name = Main;
+			sourceTree = "<group>";
+		};
 		543C52BE168C7EA50079AB2C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				5436B582168F3DEA00590FD9 /* green.png */,
+				5436B583168F3DEA00590FD9 /* green@2x.png */,
+				5436B586168F3E7500590FD9 /* greenDark.png */,
+				5436B587168F3E7600590FD9 /* greenDark@2x.png */,
+				5436B58A168F3FD500590FD9 /* red.png */,
+				5436B58B168F3FD500590FD9 /* red@2x.png */,
+				5436B58C168F3FD500590FD9 /* redDark.png */,
+				5436B58D168F3FD500590FD9 /* redDark@2x.png */,
+				5436B58E168F3FD500590FD9 /* white.png */,
+				5436B58F168F3FD500590FD9 /* white@2x.png */,
+				5436B590168F3FD500590FD9 /* whiteDark.png */,
+				5436B591168F3FD500590FD9 /* whiteDark@2x.png */,
 				541E2C1F168DFBF400479CCF /* bg.png */,
 				54BE4320168B172B00173763 /* not_found.jpg */,
 				54BE433E168B223900173763 /* cal.png */,
 				54BE433F168B223900173763 /* cal@2x.png */,
-				543C52AD168C74120079AB2C /* redButton.png */,
-				543C52AE168C74120079AB2C /* redButton@2x.png */,
-				5491737C168D366E003A60C0 /* redButtonSelected.png */,
-				5491737D168D366E003A60C0 /* redButtonSelected@2x.png */,
-				54917378168D33AE003A60C0 /* redBackground.png */,
-				54917379168D33AE003A60C0 /* redBackground@2x.png */,
-				543C52B2168C7A7D0079AB2C /* greenButton.png */,
-				543C52B3168C7A7D0079AB2C /* greenButton@2x.png */,
-				54917384168D367E003A60C0 /* greenButtonSelected.png */,
-				54917385168D367E003A60C0 /* greenButtonSelected@2x.png */,
-				5491736B168D222D003A60C0 /* whiteButton.png */,
-				5491736C168D222D003A60C0 /* whiteButton@2x.png */,
-				54917380168D3675003A60C0 /* whiteButtonSelected.png */,
-				54917381168D3675003A60C0 /* whiteButtonSelected@2x.png */,
 				543C52D7168C84020079AB2C /* facebook.png */,
 				543C52D8168C84020079AB2C /* facebook@2x.png */,
 				543C52D9168C84020079AB2C /* facebookLarge.png */,
@@ -194,6 +205,10 @@
 				543C52E5168D14E20079AB2C /* ScheduleDataSource.h */,
 				54BE4342168B2A8A00173763 /* Schedule.h */,
 				54BE4343168B2A8A00173763 /* Schedule.m */,
+				5436B56B168F1C7300590FD9 /* Shoutbox.h */,
+				5436B56C168F1C7300590FD9 /* Shoutbox.m */,
+				5436B577168F293F00590FD9 /* CustomButtons.h */,
+				5436B578168F293F00590FD9 /* CustomButtons.m */,
 			);
 			name = Objects;
 			sourceTree = "<group>";
@@ -239,10 +254,7 @@
 				5457349416823953006459B8 /* ViewController.h */,
 				5457349516823953006459B8 /* ViewController.m */,
 				543C52E6168D18AB0079AB2C /* Objects */,
-				54BE4314168B103100173763 /* MainViewController.h */,
-				54BE4315168B103100173763 /* MainViewController.m */,
-				541E2C35168E743500479CCF /* MainView.h */,
-				541E2C36168E743500479CCF /* MainView.m */,
+				5436B573168F256700590FD9 /* Main */,
 				54BE4328168B1BD600173763 /* Options */,
 				54BE432F168B1C1100173763 /* Schedule */,
 				543C52BE168C7EA50079AB2C /* Images */,
@@ -356,10 +368,6 @@
 				54BE4321168B172B00173763 /* not_found.jpg in Resources */,
 				54BE4340168B223900173763 /* cal.png in Resources */,
 				54BE4341168B223900173763 /* cal@2x.png in Resources */,
-				543C52AF168C74120079AB2C /* redButton.png in Resources */,
-				543C52B0168C74120079AB2C /* redButton@2x.png in Resources */,
-				543C52B4168C7A7D0079AB2C /* greenButton.png in Resources */,
-				543C52B5168C7A7D0079AB2C /* greenButton@2x.png in Resources */,
 				543C52D3168C83780079AB2C /* safariIcon.png in Resources */,
 				543C52D4168C83780079AB2C /* safariIcon@2x.png in Resources */,
 				543C52D5168C83780079AB2C /* safariIconLarge.png in Resources */,
@@ -368,18 +376,20 @@
 				543C52DC168C84020079AB2C /* facebook@2x.png in Resources */,
 				543C52DD168C84020079AB2C /* facebookLarge.png in Resources */,
 				543C52DE168C84020079AB2C /* facebookLarge@2x.png in Resources */,
-				5491736D168D222D003A60C0 /* whiteButton.png in Resources */,
-				5491736E168D222D003A60C0 /* whiteButton@2x.png in Resources */,
-				5491737A168D33AE003A60C0 /* redBackground.png in Resources */,
-				5491737B168D33AE003A60C0 /* redBackground@2x.png in Resources */,
-				5491737E168D366E003A60C0 /* redButtonSelected.png in Resources */,
-				5491737F168D366E003A60C0 /* redButtonSelected@2x.png in Resources */,
-				54917382168D3675003A60C0 /* whiteButtonSelected.png in Resources */,
-				54917383168D3675003A60C0 /* whiteButtonSelected@2x.png in Resources */,
-				54917386168D367E003A60C0 /* greenButtonSelected.png in Resources */,
-				54917387168D367E003A60C0 /* greenButtonSelected@2x.png in Resources */,
 				541E2C15168DD4CF00479CCF /* superNotification.caf in Resources */,
 				541E2C20168DFBF400479CCF /* bg.png in Resources */,
+				5436B584168F3DEA00590FD9 /* green.png in Resources */,
+				5436B585168F3DEA00590FD9 /* green@2x.png in Resources */,
+				5436B588168F3E7600590FD9 /* greenDark.png in Resources */,
+				5436B589168F3E7600590FD9 /* greenDark@2x.png in Resources */,
+				5436B592168F3FD500590FD9 /* red.png in Resources */,
+				5436B593168F3FD500590FD9 /* red@2x.png in Resources */,
+				5436B594168F3FD500590FD9 /* redDark.png in Resources */,
+				5436B595168F3FD500590FD9 /* redDark@2x.png in Resources */,
+				5436B596168F3FD500590FD9 /* white.png in Resources */,
+				5436B597168F3FD500590FD9 /* white@2x.png in Resources */,
+				5436B598168F3FD500590FD9 /* whiteDark.png in Resources */,
+				5436B599168F3FD500590FD9 /* whiteDark@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,7 +413,9 @@
 				54917372168D2561003A60C0 /* NotificationsViewController.m in Sources */,
 				54917375168D28C8003A60C0 /* NotificationNavigationController.m in Sources */,
 				541E2C1C168DE7DD00479CCF /* WebRadioStream.m in Sources */,
-				541E2C37168E743600479CCF /* MainView.m in Sources */,
+				5436B56D168F1C7300590FD9 /* Shoutbox.m in Sources */,
+				5436B576168F257900590FD9 /* ShoutboxViewController.m in Sources */,
+				5436B579168F293F00590FD9 /* CustomButtons.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

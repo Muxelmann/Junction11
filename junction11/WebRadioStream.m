@@ -17,7 +17,6 @@
 
 @interface WebRadioStream ()
 
-@property (strong, nonatomic) id controlButton;
 @property (strong, nonatomic) AVPlayer *audioPlayer;
 @property BOOL heighStreamQuality;
 
@@ -25,7 +24,6 @@
 
 @implementation WebRadioStream
 @synthesize delegate = _delegate;
-@synthesize controlButton = _controlButton;
 @synthesize audioPlayer = _audioPlayer;
 @synthesize heighStreamQuality = _heighStreamQuality;
 
@@ -43,14 +41,12 @@
     _delegate = delegate;
 }
 
-- (NSError *)play:(id)sender
+- (NSError *)play
 {
-    if (!self.controlButton) self.controlButton = sender;
-    
     NSError *error = NULL;
     
-    if ([self.controlButton isKindOfClass:[UIButton class]]) {
-        UIButton *button = (UIButton *)self.controlButton;
+    if ([[self.delegate playButton] isKindOfClass:[UIButton class]]) {
+        UIButton *button = (UIButton *)[self.delegate playButton];
     
         if (self.audioPlayer && self.audioPlayer.rate == 0.0) {
         
@@ -93,12 +89,10 @@
     return (self.audioPlayer.rate > 0.0);
 }
 
-- (void)pause:(id)sender
+- (void)pause
 {
-    if (!self.controlButton) self.controlButton = sender;
-    
-    if ([self.controlButton isKindOfClass:[UIButton class]]) {
-        UIButton *button = (UIButton *)self.controlButton;
+    if ([[self.delegate playButton] isKindOfClass:[UIButton class]]) {
+        UIButton *button = (UIButton *)[self.delegate playButton];
         if (self.audioPlayer && [self isPlaying]) {
             [self.audioPlayer pause];
         }
@@ -108,16 +102,14 @@
     }
 }
 
-- (void)playAndResume:(id)sender
+- (void)playAndResume
 {
-    if (!self.controlButton) self.controlButton = sender;
-    
-    if ([self.controlButton isKindOfClass:[UIButton class]]) {
-        UIButton *button = (UIButton *)self.controlButton;
+
+    if ([[self.delegate playButton] isKindOfClass:[UIButton class]]) {
         if ([self isPlaying]) {
-            [self pause:button];
+            [self pause];
         } else {
-            NSError *error = [self play:button];
+            NSError *error = [self play];
             if (error) NSLog(@"ERROR %@", error);
         }
     }
@@ -127,22 +119,33 @@
 - (void)remoteControlReceivedOfType:(UIEventSubtype)type
 {
     NSLog(@"Control Received %i", type);
-    if (self.controlButton)
+    if ([self.delegate playButton])
     switch (type) {
         case UIEventSubtypeRemoteControlTogglePlayPause:
-            [self playAndResume:self.controlButton];
+            [self playAndResume];
             break;
             
         case UIEventSubtypeRemoteControlPause:
-            [self pause:self.controlButton];
+            [self pause];
             break;
             
         case UIEventSubtypeRemoteControlPlay:
-            [self play:self.controlButton];
+            [self play];
             break;
             
         default:
             break;
+    }
+}
+
+- (void)update
+{
+    if ([self isPlaying]) {
+        [self.delegate playButton].backgroundColor = [UIColor colorWithRed:.1 green:.6 blue:.1 alpha:1.0];
+        [[self.delegate playButton] setTitle:@"Pause" forState:UIControlStateNormal];
+    } else {
+        [self.delegate playButton].backgroundColor = [UIColor colorWithRed:.9 green:.6 blue:.0 alpha:1.0];
+        [[self.delegate playButton] setTitle:@"Resume" forState:UIControlStateNormal];
     }
 }
 

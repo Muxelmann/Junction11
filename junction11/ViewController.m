@@ -240,7 +240,6 @@
     notification.timeZone = [NSTimeZone defaultTimeZone];
     notification.alertBody = [[dataSource showTitle] stringByAppendingString:@" will start shortly"];
     notification.alertAction = @"Open Junction11 App...";
-//    notification.soundName = UILocalNotificationDefaultSoundName;
     notification.soundName = @"superNotification.caf";
 
     

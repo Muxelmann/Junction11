@@ -16,11 +16,12 @@
 
 //- (NSError *)play;
 - (BOOL)isPlaying;
-- (void)pause:(id)sender;
+- (void)pause;
 - (void)remoteControlReceivedOfType:(UIEventSubtype)type;
+- (void)update;
 //- (void)resume;
 
-- (void)playAndResume:(id)sender;
+- (void)playAndResume;
 
 @end
 

@@ -7,6 +7,7 @@
 //
 
 #import "OptionsViewController.h"
+#import "CustomButtons.h"
 
 @interface OptionsViewController ()
 
@@ -180,24 +181,6 @@
     return view;
 }
 
-//- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-//{
-//    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-//        NSLog(@"F2 [%f, %f]", self.view.frame.size.width, self.view.frame.size.height);
-//        NSLog(@"B2 [%f, %f]", self.view.bounds.size.width, self.view.bounds.size.height);
-//    }
-//}
-//
-//- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-//{
-//    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-//        
-//        NSLog(@"F2 [%f, %f]", self.view.frame.size.width, self.view.frame.size.height);
-//        NSLog(@"B2 [%f, %f]", self.view.bounds.size.width, self.view.bounds.size.height);
-//    }
-//}
-
-
 /*
 #pragma mark - Table view data source
 
@@ -276,7 +259,7 @@
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
  
-    if (indexPath.section == 1 && indexPath.row == 0) {
+    if (indexPath.section == 2 && indexPath.row == 0) {
         [self updateWebcam];
     }
 }
@@ -326,12 +309,11 @@
 - (void)updateNotificationButton
 {
     if (!self.notoficationsSwitch.on || [self.delegate numberOfNotifications] < 1) {
-        self.manageNotifications.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"whiteButton.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
-        self.manageNotifications.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"whiteButtonSelected.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
+        
+        [CustomButtons makeCellButtonWhite:self.manageNotifications];
         self.manageNotifications.userInteractionEnabled = NO;
     } else {
-        self.manageNotifications.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"greenButton.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
-        self.manageNotifications.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"greenButtonSelected.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
+        [CustomButtons makeCellButtonGreen:self.manageNotifications];
         self.manageNotifications.userInteractionEnabled = YES;
     }
     
@@ -345,6 +327,17 @@
         self.manageNotificationsLabel.text = [NSString stringWithFormat:@"%i reminders", [self.delegate numberOfNotifications]];
     }
 }
+
+//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+//    
+//    if (indexPath.section == 1 && indexPath.row == 0) {
+//        self.manageNotifications.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"glossButton.png"] stretchableImageWithLeftCapWidth:20.0 topCapHeight:0.0]];
+//        self.manageNotifications.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"glossButtonSelected.png"] stretchableImageWithLeftCapWidth:20.0 topCapHeight:0.0]];
+//    }
+//    return cell;
+//}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {

@@ -7,14 +7,16 @@
 //
 
 #import "MainViewController.h"
-#import <QuartzCore/QuartzCore.h>
+#import "CustomButtons.h"
 
 @interface MainViewController ()
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *optionsButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *shoutboxConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *shoutboxPlayButtonConstraint;
 @property (strong, nonatomic) WebRadioStream *stream;
-@property (strong, nonatomic) UISwipeGestureRecognizer *swipeGesture;
-@property (nonatomic) bool isOptionsVisible;
+@property (strong, nonatomic) UISwipeGestureRecognizer *swipeGestureOptions;
+@property (strong, nonatomic) UISwipeGestureRecognizer *swipeGestureShoutbox;
 
 @end
 
@@ -23,8 +25,10 @@
 @synthesize stream = _stream;
 @synthesize playButton = _playButton;
 @synthesize optionsButton = _optionsButton;
-@synthesize swipeGesture = _swipeGesture;
-@synthesize isOptionsVisible = _isOptionsVisible;
+@synthesize shoutboxConstraint = _shoutboxConstraint;
+@synthesize shoutboxPlayButtonConstraint = _shoutboxPlayButtonConstraint;
+@synthesize swipeGestureOptions = _swipeGestureOptions;
+@synthesize swipeGestureShoutbox = _swipeGestureShoutbox;
 @synthesize schedule = _schedule;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -40,72 +44,52 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    
+
+    // Set up delegates and subviews first
     self.stream.delegate = self;
-    if ([self.view isKindOfClass:[MainView class]]) {
-        ((MainView *)self.view).delegate = self;
-    }
+    for (UIView *view in self.view.subviews)
+        if ([view.restorationIdentifier isEqualToString:@"shoutboxID"]) {
+            view.backgroundColor = [UIColor clearColor];
+            view.autoresizingMask = UIViewAutoresizingNone;
+        }
     
     self.view.userInteractionEnabled = YES;
     
-    self.swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
-    self.swipeGesture.direction = UISwipeGestureRecognizerDirectionRight;
+    // Gesture to display options menu
+    self.swipeGestureOptions = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(loadOptionsView:)];
+    self.swipeGestureOptions.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:self.swipeGestureOptions];
     
-    [self.view addGestureRecognizer:self.swipeGesture];
-    self.isOptionsVisible = false;
+    self.shoutboxConstraint.constant = -237;
+    // Gesture to display shoutbox
+    self.swipeGestureShoutbox = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showShoutbox:)];
+    self.swipeGestureShoutbox.direction = UISwipeGestureRecognizerDirectionDown;
+    [self.view addGestureRecognizer:self.swipeGestureShoutbox];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:YES];
 
     self.view.backgroundColor = [UIColor colorWithRed:(1./255.) green:(114./255.) blue:(173./255.) alpha:1.0];
-    
    
     [self.playButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.playButton setTitle:@"Play" forState:UIControlStateNormal];
-    self.playButton.backgroundColor = [UIColor blackColor];
-    self.playButton.imageView.contentMode = UIViewContentModeScaleToFill;
-
-    CAGradientLayer *gradient = [[CAGradientLayer alloc] init];
-    gradient.frame = self.playButton.bounds;
-    gradient.position = CGPointMake(self.playButton.bounds.size.width/2, self.playButton.bounds.size.height/2);
-    gradient.colors = [NSArray arrayWithObjects:
-                       (id)[[UIColor colorWithWhite:1.0f alpha:0.4f] CGColor],
-                        (id)[[UIColor colorWithWhite:1.0f alpha:0.2f] CGColor],
-                        (id)[[UIColor colorWithWhite:0.75f alpha:0.2f] CGColor],
-                        (id)[[UIColor colorWithWhite:0.4f alpha:0.2f] CGColor],
-                        (id)[[UIColor colorWithWhite:1.0f alpha:0.4f] CGColor],
-                       nil];
-    gradient.locations = [NSArray arrayWithObjects:
-                          [NSNumber numberWithFloat:0.0f],
-                          [NSNumber numberWithFloat:0.5f],
-                          [NSNumber numberWithFloat:0.5f],
-                          [NSNumber numberWithFloat:0.8f],
-                          [NSNumber numberWithFloat:1.0f],
-                          nil];
+    [CustomButtons makeButtonGlossy:self.playButton];
     
-    [self.playButton.layer addSublayer:gradient];
-    
-    self.playButton.layer.cornerRadius = 10.0f;
-    self.playButton.layer.masksToBounds = YES;
-    self.playButton.layer.borderColor = [UIColor blackColor].CGColor;
-    self.playButton.layer.borderWidth = 0.5f;
     
     // Once everything visual has been set up, start webstream
-    [self.stream playAndResume:self.playButton];
-//    NSLog(@"Start stream : %@", [self.stream play]);
+    [self.stream playAndResume];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateButtonAndStream:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
-    if ([self.view isKindOfClass:[MainView class]])
-        [(MainView *)self.view enableFirstResponder];
+    [super viewWillAppear:animated];
+    [self updateButtonAndStream:nil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-//    NSLog(@"Searching Segue...");
     if ([segue.identifier isEqualToString:@"showSchedule"]) {
-//        NSLog(@"showSchedule intercepted...");
 
         if ([segue.destinationViewController isKindOfClass:[ScheduleNavigationController class]]) {
             ScheduleNavigationController *navigationController = (ScheduleNavigationController *)segue.destinationViewController;
@@ -128,28 +112,31 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark Getter and setter
+
 - (WebRadioStream *)stream
 {
     if (!_stream) _stream = [[WebRadioStream alloc] init];
     return _stream;
 }
 
-- (IBAction)loadView:(id)sender {
+#pragma mark Loading subviews
+
+- (IBAction)loadOptionsView:(id)sender {
     
     CGRect rect = self.view.frame;
     CGFloat constant = 259;
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
         constant = 320;
     
-    if (self.isOptionsVisible) {
+    if (self.swipeGestureOptions.direction == UISwipeGestureRecognizerDirectionLeft) {
         rect.origin.x -= constant;
         
         self.optionsButton.title = @"Options";
         
         [self.delegate optionsWillDisappear];
         
-        self.isOptionsVisible = false;
-        self.swipeGesture.direction = UISwipeGestureRecognizerDirectionRight;
+        self.swipeGestureOptions.direction = UISwipeGestureRecognizerDirectionRight;
     } else {
         rect.origin.x += constant;
         
@@ -157,8 +144,7 @@
         
         [self.delegate optionsWillAppearWithWidth:constant];
         
-        self.isOptionsVisible = true;
-        self.swipeGesture.direction = UISwipeGestureRecognizerDirectionLeft;
+        self.swipeGestureOptions.direction = UISwipeGestureRecognizerDirectionLeft;
     }
     
     [UIView animateWithDuration:.25f animations:^{
@@ -168,10 +154,112 @@
     }];
 }
 
-- (IBAction)handleSwipe:(UISwipeGestureRecognizer *)recognizer
+- (IBAction)showShoutbox:(UISwipeGestureRecognizer *)recognizer
 {
-    [self loadView:nil];
+    if (recognizer.direction == UISwipeGestureRecognizerDirectionDown) {
+        recognizer.direction = UISwipeGestureRecognizerDirectionUp;
+        [UIView animateWithDuration:0.5 animations:^{
+            self.shoutboxConstraint.constant = 44;
+            self.shoutboxPlayButtonConstraint.constant = 20;
+            [self.view layoutIfNeeded];
+        }];
+    } else {
+        recognizer.direction = UISwipeGestureRecognizerDirectionDown;
+        [UIView animateWithDuration:0.5 animations:^{
+            self.shoutboxConstraint.constant = -237;
+            self.shoutboxPlayButtonConstraint.constant = 64;
+            [self.view layoutIfNeeded];
+        }];
+    }
 }
+
+#pragma mark Setting and stream options
+
+- (BOOL)isInHeighStream
+{
+    return [self.delegate isHeighStreamEnabled];
+}
+
+- (IBAction)playButtonPressed:(UIButton *)sender
+{
+    sender.backgroundColor = [UIColor darkGrayColor];
+}
+- (IBAction)playButtonPushed:(UIButton *)sender
+{
+    [self.stream playAndResume];
+}
+
+- (void)updateStreamQuality
+{
+    if ([self.stream isPlaying]) {
+        [self.stream pause];
+        [self.stream playAndResume];
+    }
+}
+
+- (void)updateButtonAndStream:(id)sender
+{
+    if (self.isFirstResponder) {
+        [self.stream update];
+    }
+    [self becomeFirstResponder];
+}
+
+
+#pragma mark - Player iPod controlls
+
+- (BOOL)canBecomeFirstResponder
+{
+    return (self.stream != NULL);
+}
+
+- (BOOL)canResignFirstResponder
+{
+//    BOOL canResign = (!self.stream || ![self.stream isPlaying]);
+    BOOL canResign = (self.swipeGestureShoutbox.direction == UISwipeGestureRecognizerDirectionUp);
+//    NSLog(@"CAN RESIGN: %i", canResign);
+    return canResign;
+//    return [self isFirstResponder];
+}
+
+- (BOOL)becomeFirstResponder
+{
+    if (self.canBecomeFirstResponder) {
+        [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+        BOOL first = [super becomeFirstResponder];
+//        NSLog(@"BECOME FIRST : %i", first);
+        return first;
+    }/* else
+        NSLog(@"CANNOT BECOME FIRST");
+      */
+    return NO;
+}
+
+- (BOOL)resignFirstResponder
+{
+    if (self.canResignFirstResponder) {
+        [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
+        BOOL resign = [super resignFirstResponder];
+//        NSLog(@"RESIGN FIRST : %i", resign);
+        return resign;
+    }/* else
+        NSLog(@"CANNOT RESIGN FIRST");
+      */
+        
+    return NO;
+}
+
+- (void)remoteControlReceivedWithEvent:(UIEvent *)event
+{
+    [self.stream remoteControlReceivedOfType:event.subtype];
+}
+
+- (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+    // Do nothing
+}
+
+#pragma mark Debugging code
 
 - (IBAction)test:(id)sender {
     NSLog(@"STREAM %@", ([self.delegate isHeighStreamEnabled]) ? @"YES" : @"NO");
@@ -188,7 +276,6 @@
     notification.timeZone = [NSTimeZone defaultTimeZone];
     notification.alertBody = [@"Test " stringByAppendingString:@" will begin shortly"];
     notification.alertAction = @"Open Junction11 App";
-    //    notification.soundName = UILocalNotificationDefaultSoundName;
     notification.soundName = @"superNotification.caf";
     
     
@@ -202,52 +289,6 @@
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     
     NSLog(@"Test Notification scheduled...");
-}
-
-- (BOOL)isInHeighStream
-{
-    return [self.delegate isHeighStreamEnabled];
-}
-
-- (IBAction)playButtonPressed:(UIButton *)sender
-{
-    sender.backgroundColor = [UIColor darkGrayColor];
-}
-- (IBAction)playButtonPushed:(UIButton *)sender
-{
-    [self.stream playAndResume:sender];
-}
-
-- (void)updateStreamQuality
-{
-    if ([self.stream isPlaying]) {
-        [self.stream pause:self.playButton];
-        [self.stream playAndResume:self.playButton];
-    }
-}
-
-#pragma mark - Player iPod controlls
-
-- (BOOL)canBecomeFirstResponder
-{
-    return (self.stream != NULL);
-}
-
-- (BOOL)canResignFirstResponder
-{
-    return YES;
-//    return [self isFirstResponder];
-}
-
-
-- (void)remoteControlReceivedWithEvent:(UIEvent *)event
-{
-    [self.stream remoteControlReceivedOfType:event.subtype];
-}
-
-- (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event
-{
-    // Do nothing
 }
 
 @end

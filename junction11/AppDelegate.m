@@ -19,9 +19,27 @@
     // Allow the app sound to continue to play when the screen is locked.
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     
+    // Ensure that when opened the icon number is reset to zero
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    
+    
     return YES;
 }
-							
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    if (notification && [notification isKindOfClass:[UILocalNotification class]]) {
+        
+        [[UIApplication sharedApplication] cancelLocalNotification:notification];
+        
+        if (notification.repeatInterval)
+            [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    }
+    
+    // Ensure that when opened the icon number is reset to zero
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -37,6 +55,8 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    // Ensure that when opened the icon number is reset to zero
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application

@@ -7,6 +7,7 @@
 //
 
 #import "ShowViewController.h"
+#import "CustomButtons.h"
 
 @interface ShowViewController ()
 @end
@@ -168,12 +169,10 @@
         
         if ([self.delegate isNotificationForTime:[self.dataSource showStartTime]]) {
             notifyLabel.text = @"Stop reminding me...";
-            cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"redButton.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
-            cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"redButtonSelected.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
+            [CustomButtons makeCellButtonRed:cell];
         } else {
             notifyLabel.text = @"Remind me...";
-            cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"greenButton.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
-            cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"greenButtonSelected.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
+            [CustomButtons makeCellButtonGreen:cell];
         }
     }
     
@@ -208,44 +207,6 @@
     return 45.0;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
@@ -261,15 +222,21 @@
             
             [self.delegate unscheduleNotificationForTime:time];
             notifyLabel.text = @"Remind me...";
-            cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"greenButton.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
+            [CustomButtons makeCellButtonGreen:cell];
             
         } else {
             
             [self.delegate scheduleNotificationFor:self.dataSource];
             notifyLabel.text = @"Stop reminding me...";
-            cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"redButton.png"] stretchableImageWithLeftCapWidth:10.0 topCapHeight:0.0]];
+            [CustomButtons makeCellButtonRed:cell];
             
         }
+    } else if (@"linkCell") {
+        NSString *url = [self.dataSource showURL];
+        url = [url stringByReplacingOccurrencesOfString:@"http://www.facebook.com/" withString:@"fb://profile/"];
+//        url = @"fb://profile/JohnPurkiss";
+        NSLog(@"LINK: %@", url);
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
     }
     
     cell.selected = NO;
@@ -282,5 +249,46 @@
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
 }
+
+// #pragma mark Table editing
+
+/*
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
+
+/*
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the row from the data source
+ [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ }
+ else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ }
+ }
+ */
+
+/*
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+ {
+ }
+ */
+
+/*
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
 
 @end

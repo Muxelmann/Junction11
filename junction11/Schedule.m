@@ -239,7 +239,6 @@
     startDifference.day = day;
     
     return [self.gregorian dateByAddingComponents:startDifference toDate:beginningOfWeek options:0];
-
 }
 
 - (NSDate *)endingTimeOfShow:(NSInteger)show onDay:(NSInteger)day
@@ -379,13 +378,21 @@
 }
 
 - (NSDate *)notifyTimeOfMinutes:(NSInteger)minutes beforeShow:(NSInteger)show onDay:(NSInteger)day
-{   
+{
     NSDate *start = [self startingTimeOfShow:show onDay:day];
     
     NSDateComponents *differenceToNotification = [[NSDateComponents alloc] init];
     differenceToNotification.minute = -minutes;
     
     return [self.gregorian dateByAddingComponents:differenceToNotification toDate:start options:0];
+    
+    
+//    NSDate *now = [NSDate date];
+//    NSDateComponents *comp = [[NSDateComponents alloc] init];
+//    comp.minute = 1;
+//    NSDate *test = [self.gregorian dateByAddingComponents:comp toDate:now options:0];
+//    
+//    return test;
 }
 
 @end

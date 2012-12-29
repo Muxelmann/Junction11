@@ -8,6 +8,7 @@
 
 #import "NotificationsViewController.h"
 #import "NotificationNavigationController.h"
+#import "CustomButtons.h"
 
 @interface NotificationsViewController ()
 
@@ -33,18 +34,8 @@
 {
     [super viewDidLoad];
 
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setBackgroundImage:[UIImage imageNamed:@"redBackground.png"] forState:UIControlStateNormal];
-    [button setTitle:@"Delete all" forState:UIControlStateNormal];
-    button.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:12.0f];
-    [button.layer setCornerRadius:4.0f];
-    [button.layer setMasksToBounds:YES];
-    [button.layer setBorderWidth:1.0f];
-    [button.layer setBorderColor: [[UIColor grayColor] CGColor]];
-    button.frame=CGRectMake(0.0, 100.0, 60.0, 30.0);
-    [button addTarget:self action:@selector(deleteAll:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem* deleteItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    UIBarButtonItem* deleteItem = [[UIBarButtonItem alloc] initWithTitle:@"Delete all" style:UIBarButtonItemStyleBordered target:self action:@selector(deleteAll:)];
+    deleteItem.tintColor = [UIColor redColor];
     self.navigationItem.rightBarButtonItem = deleteItem;
     
     // Uncomment the following line to preserve selection between presentations.
