@@ -8,13 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "ScheduleNavigationController.h"
+#import "WebRadioStream.h"
+#import "MainView.h"
 
 @protocol MainViewDelegate;
 
-@interface MainViewController : UIViewController
+@interface MainViewController : UIViewController <WebPlayerDelegate, MainCommunicationDelegate>
 
 @property (nonatomic, assign) id<ShowViewDelegate, MainViewDelegate, ShowSchedulingDelegate> delegate;
 @property (nonatomic, assign) id<ScheduleDataSource> schedule;
+@property (weak, nonatomic) IBOutlet UIButton *playButton;
+
+- (void)updateStreamQuality;
 
 @end
 

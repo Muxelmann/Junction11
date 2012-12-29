@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		541E2C15168DD4CF00479CCF /* superNotification.caf in Resources */ = {isa = PBXBuildFile; fileRef = 541E2C14168DD4CF00479CCF /* superNotification.caf */; };
+		541E2C1C168DE7DD00479CCF /* WebRadioStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 541E2C1B168DE7DD00479CCF /* WebRadioStream.m */; };
+		541E2C1E168DE86E00479CCF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 541E2C1D168DE86E00479CCF /* AVFoundation.framework */; };
+		541E2C20168DFBF400479CCF /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 541E2C1F168DFBF400479CCF /* bg.png */; };
+		541E2C37168E743600479CCF /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 541E2C36168E743500479CCF /* MainView.m */; };
 		543C52AF168C74120079AB2C /* redButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 543C52AD168C74120079AB2C /* redButton.png */; };
 		543C52B0168C74120079AB2C /* redButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 543C52AE168C74120079AB2C /* redButton@2x.png */; };
 		543C52B4168C7A7D0079AB2C /* greenButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 543C52B2168C7A7D0079AB2C /* greenButton.png */; };
@@ -59,6 +64,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		541E2C14168DD4CF00479CCF /* superNotification.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = superNotification.caf; sourceTree = "<group>"; };
+		541E2C1A168DE7DD00479CCF /* WebRadioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebRadioStream.h; sourceTree = "<group>"; };
+		541E2C1B168DE7DD00479CCF /* WebRadioStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebRadioStream.m; sourceTree = "<group>"; };
+		541E2C1D168DE86E00479CCF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		541E2C1F168DFBF400479CCF /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
+		541E2C35168E743500479CCF /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
+		541E2C36168E743500479CCF /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
 		543C52AD168C74120079AB2C /* redButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redButton.png; sourceTree = "<group>"; };
 		543C52AE168C74120079AB2C /* redButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redButton@2x.png"; sourceTree = "<group>"; };
 		543C52B2168C7A7D0079AB2C /* greenButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greenButton.png; sourceTree = "<group>"; };
@@ -130,6 +142,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				541E2C1E168DE86E00479CCF /* AVFoundation.framework in Frameworks */,
 				54BE431F168B11BF00173763 /* QuartzCore.framework in Frameworks */,
 				5457347716823953006459B8 /* UIKit.framework in Frameworks */,
 				5457347916823953006459B8 /* Foundation.framework in Frameworks */,
@@ -143,6 +156,7 @@
 		543C52BE168C7EA50079AB2C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				541E2C1F168DFBF400479CCF /* bg.png */,
 				54BE4320168B172B00173763 /* not_found.jpg */,
 				54BE433E168B223900173763 /* cal.png */,
 				54BE433F168B223900173763 /* cal@2x.png */,
@@ -172,19 +186,22 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
-		543C52E6168D18AB0079AB2C /* Object */ = {
+		543C52E6168D18AB0079AB2C /* Objects */ = {
 			isa = PBXGroup;
 			children = (
+				541E2C1A168DE7DD00479CCF /* WebRadioStream.h */,
+				541E2C1B168DE7DD00479CCF /* WebRadioStream.m */,
 				543C52E5168D14E20079AB2C /* ScheduleDataSource.h */,
 				54BE4342168B2A8A00173763 /* Schedule.h */,
 				54BE4343168B2A8A00173763 /* Schedule.m */,
 			);
-			name = Object;
+			name = Objects;
 			sourceTree = "<group>";
 		};
 		5457346716823953006459B8 = {
 			isa = PBXGroup;
 			children = (
+				541E2C1D168DE86E00479CCF /* AVFoundation.framework */,
 				54BE431E168B11BF00173763 /* QuartzCore.framework */,
 				54E69A0D168768DF0055425E /* icon_57.png */,
 				54E69A0B168768DC0055425E /* icon_114.png */,
@@ -221,12 +238,15 @@
 				5457349116823953006459B8 /* MainStoryboard_iPad.storyboard */,
 				5457349416823953006459B8 /* ViewController.h */,
 				5457349516823953006459B8 /* ViewController.m */,
-				543C52E6168D18AB0079AB2C /* Object */,
+				543C52E6168D18AB0079AB2C /* Objects */,
 				54BE4314168B103100173763 /* MainViewController.h */,
 				54BE4315168B103100173763 /* MainViewController.m */,
+				541E2C35168E743500479CCF /* MainView.h */,
+				541E2C36168E743500479CCF /* MainView.m */,
 				54BE4328168B1BD600173763 /* Options */,
 				54BE432F168B1C1100173763 /* Schedule */,
 				543C52BE168C7EA50079AB2C /* Images */,
+				541E2C14168DD4CF00479CCF /* superNotification.caf */,
 				5457347D16823953006459B8 /* Supporting Files */,
 			);
 			path = junction11;
@@ -358,6 +378,8 @@
 				54917383168D3675003A60C0 /* whiteButtonSelected@2x.png in Resources */,
 				54917386168D367E003A60C0 /* greenButtonSelected.png in Resources */,
 				54917387168D367E003A60C0 /* greenButtonSelected@2x.png in Resources */,
+				541E2C15168DD4CF00479CCF /* superNotification.caf in Resources */,
+				541E2C20168DFBF400479CCF /* bg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,6 +402,8 @@
 				543C52E4168CFC190079AB2C /* ScheduleNavigationController.m in Sources */,
 				54917372168D2561003A60C0 /* NotificationsViewController.m in Sources */,
 				54917375168D28C8003A60C0 /* NotificationNavigationController.m in Sources */,
+				541E2C1C168DE7DD00479CCF /* WebRadioStream.m in Sources */,
+				541E2C37168E743600479CCF /* MainView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

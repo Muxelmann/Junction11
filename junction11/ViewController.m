@@ -128,12 +128,7 @@
 #pragma mark MainViewDelegate
 
 - (void)optionsWillAppearWithWidth:(CGFloat)width
-{
-//    CGRect frameRect = self.options.view.frame;
-//    frameRect.size.width = width;
-//    frameRect.origin = CGPointMake(0, 0);
-//    self.options.view.frame = frameRect;
-    
+{   
     [self.options setWidth:width];
     [self.options viewWillAppear:YES];
 }
@@ -150,12 +145,27 @@
     NSLog(@"STREAM CHANGED! [%@]", (isEnabled) ? @"YES" : @"NO");
     self.heighStream = isEnabled;
     [self saveData];
+    
+    [self.main updateStreamQuality];
 }
 
 - (void)setNotificationsEnabled:(bool)isEnabled
 {
     NSLog(@"NOTIFICATIONS CHANGED! [%@]", (isEnabled) ? @"YES" : @"NO");
     self.notifications = isEnabled;
+    
+    if (isEnabled) {
+        for (NSInteger i = 0; i < [self.notificationsArray count]; i++) {
+            
+            [[UIApplication sharedApplication] scheduleLocalNotification:[self.notificationsArray objectAtIndex:i]];
+            
+            NSLog(@"Notification restored [%i/%i]", i, [self.notificationsArray count]);
+        }
+    } else {
+        [[UIApplication sharedApplication] cancelAllLocalNotifications];
+        NSLog(@"All notifications disabled [%i]", [self.notificationsArray count]);
+    }
+    
     [self saveData];
 }
 
@@ -222,15 +232,16 @@
     return NO;
 }
 
-
 - (void)scheduleNotificationFor:(id<ShowDataSource>)dataSource
 {
     UILocalNotification *notification = [[UILocalNotification alloc] init];
+      
     notification.fireDate = [dataSource showNotify];
     notification.timeZone = [NSTimeZone defaultTimeZone];
-    notification.alertBody = [[dataSource showTitle] stringByAppendingString:@" will begin shortly"];
-    notification.alertAction = @"Start Listening";
-    notification.soundName = UILocalNotificationDefaultSoundName;
+    notification.alertBody = [[dataSource showTitle] stringByAppendingString:@" will start shortly"];
+    notification.alertAction = @"Open Junction11 App...";
+//    notification.soundName = UILocalNotificationDefaultSoundName;
+    notification.soundName = @"superNotification.caf";
 
     
     NSArray *userInfoKeys = [[NSArray alloc] initWithObjects: @"title", @"time", nil];

@@ -8,6 +8,8 @@
 
 #import "Schedule.h"
 
+#define DATA_URL @"http://junction11.rusu.co.uk/customscripts/ios_v2.php"
+
 @interface Schedule ()
 @property (strong, nonatomic) NSMutableArray *schedule;
 @property (strong, nonatomic) NSCalendar *gregorian;
@@ -39,7 +41,7 @@
     [self.schedule removeAllObjects];
     
     // Sets URL from where to load the XML data
-    NSString *url = @"http://junction11.rusu.co.uk/customscripts/ios_v2.php";
+    NSString *url = DATA_URL;
     
     // Loads data and strores it in string
     NSData *data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
@@ -384,11 +386,6 @@
     differenceToNotification.minute = -minutes;
     
     return [self.gregorian dateByAddingComponents:differenceToNotification toDate:start options:0];
-}
-
-- (NSInteger *)beginningOfWeek
-{
-    
 }
 
 @end

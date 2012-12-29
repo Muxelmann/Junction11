@@ -145,10 +145,7 @@
                 if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
                     [navigationController.popover dismissPopoverAnimated:YES];
                 else {
-                    [self viewWillDisappear:YES];
-                    [self dismissViewControllerAnimated:YES completion:^{
-                        [self removeFromParentViewController];
-                    }];
+                    [self doneButton:NULL];
                 }
             }
         }
@@ -190,10 +187,22 @@
 
 - (IBAction)deleteAll:(id)sender
 {
+    NSInteger i = [self.delegate numberOfNotifications];
+    while (i > 0) {
+        [self.delegate unscheduleNotificationForTime:[self.delegate timeForNotificationAtIndex:0]];
+        i--;
+    }
     
+    [self.button updateNotificationButton];
+    [self doneButton:NULL];
 }
 
-- (IBAction)doneButton:(id)sender {
+- (IBAction)doneButton:(id)sender
+{
+    [self viewWillDisappear:YES];
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self removeFromParentViewController];
+    }];
 }
 
 
