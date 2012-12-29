@@ -49,7 +49,6 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-//#warning Potentially incomplete method implementation.
     // Return the number of sections.
     NSInteger numberOfSections = 1;
     
@@ -64,7 +63,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//#warning Incomplete method implementation.
     // Return the number of rows in the section.
     if (section == 0)
         return 2;
@@ -233,10 +231,18 @@
         }
     } else if (@"linkCell") {
         NSString *url = [self.dataSource showURL];
-        url = [url stringByReplacingOccurrencesOfString:@"http://www.facebook.com/" withString:@"fb://profile/"];
-//        url = @"fb://profile/JohnPurkiss";
-        NSLog(@"LINK: %@", url);
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+        
+        // Find FB-ID from
+        NSString *dataURL = [url stringByReplacingOccurrencesOfString:@"www" withString:@"graph"];
+        NSData *data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:dataURL]];
+        NSError *error;
+        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        
+        if (error) NSLog(@"ERROR: %@", error);
+        else {
+            url = [url stringByReplacingOccurrencesOfString:[dictionary objectForKey:@"username"] withString:[dictionary objectForKey:@"id"]];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+        }
     }
     
     cell.selected = NO;

@@ -67,7 +67,6 @@
             if (myData) {
                 // we are probably reachable, check the response;
                 AVPlayerItem *newPlayer;
-                NSLog(@"QUAL %i", [self.delegate isInHeighStream]);
                 newPlayer = [AVPlayerItem playerItemWithURL:streamURL];
                 [self.audioPlayer replaceCurrentItemWithPlayerItem:newPlayer];
                 

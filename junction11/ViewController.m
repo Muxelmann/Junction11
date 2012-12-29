@@ -94,7 +94,8 @@
 //    [defaults setObject:[self.notificationsArray copy] forKey:@"notificationsArray"];
     
     [defaults synchronize];
-    NSLog(@"Data saved [%i, %i]", self.heighStream, self.notifications);
+    
+    NSLog(@"Data saved\nHigh Stream: %i\nReminders enabled: %i\nNotifications: %@", self.heighStream, self.notifications, self.notificationsArray);
 }
 
 - (void)loadData
@@ -122,7 +123,7 @@
     if (![self.notificationsArray isKindOfClass:[NSMutableArray class]])
         self.notificationsArray = [[NSMutableArray alloc] init];
     
-    NSLog(@"Data loaded [%i, %i]", self.heighStream, self.notifications);
+    NSLog(@"Data loaded\nHigh Stream: %i\nReminders enabled: %i\nNotifications: %@", self.heighStream, self.notifications, self.notificationsArray);
 }
 
 #pragma mark MainViewDelegate
@@ -142,7 +143,7 @@
 
 - (void)setHeighStreamEnabled:(bool)isEnabled
 {
-    NSLog(@"STREAM CHANGED! [%@]", (isEnabled) ? @"YES" : @"NO");
+//    NSLog(@"STREAM CHANGED! [%@]", (isEnabled) ? @"YES" : @"NO");
     self.heighStream = isEnabled;
     [self saveData];
     
@@ -151,7 +152,7 @@
 
 - (void)setNotificationsEnabled:(bool)isEnabled
 {
-    NSLog(@"NOTIFICATIONS CHANGED! [%@]", (isEnabled) ? @"YES" : @"NO");
+//    NSLog(@"NOTIFICATIONS CHANGED! [%@]", (isEnabled) ? @"YES" : @"NO");
     self.notifications = isEnabled;
     
     if (isEnabled) {
@@ -159,11 +160,11 @@
             
             [[UIApplication sharedApplication] scheduleLocalNotification:[self.notificationsArray objectAtIndex:i]];
             
-            NSLog(@"Notification restored [%i/%i]", i, [self.notificationsArray count]);
+//            NSLog(@"Notification restored [%i/%i]", i, [self.notificationsArray count]);
         }
     } else {
         [[UIApplication sharedApplication] cancelAllLocalNotifications];
-        NSLog(@"All notifications disabled [%i]", [self.notificationsArray count]);
+//        NSLog(@"All notifications disabled [%i]", [self.notificationsArray count]);
     }
     
     [self saveData];
@@ -193,13 +194,13 @@
 
 - (BOOL)areNotificationsEnabled
 {
-    NSLog(@"NOTIFICATIONS CHECK! [%@]", (self.notifications) ? @"YES" : @"NO");
+//    NSLog(@"NOTIFICATIONS CHECK! [%@]", (self.notifications) ? @"YES" : @"NO");
     return self.notifications;
 }
 
 - (BOOL)isHeighStreamEnabled
 {
-    NSLog(@"HEIGH STREAM CHECK! [%@]", (self.heighStream) ? @"YES" : @"NO");
+//    NSLog(@"HEIGH STREAM CHECK! [%@]", (self.heighStream) ? @"YES" : @"NO");
     return self.heighStream;
 }
 
@@ -223,7 +224,7 @@
             NSDate* timeObject = [notification.userInfo objectForKey:@"time"];
             
             if ([timeObject isEqualToDate:time]) {
-                NSLog(@"Notification found");
+//                NSLog(@"Notification found");
                 return YES;
             }
         }
@@ -256,7 +257,7 @@
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     [self saveData];
     
-    NSLog(@"Notification scheduled [%i]", [self.notificationsArray count]);
+//    NSLog(@"Notification scheduled [%i]", [self.notificationsArray count]);
 }
 
 - (BOOL)unscheduleNotificationForTime:(NSDate*)time
@@ -274,7 +275,7 @@
                 [[UIApplication sharedApplication] cancelLocalNotification:notification];
                 [self.notificationsArray removeObject:object];
                 [self saveData];
-                NSLog(@"Notification canceled [%i]", [self.notificationsArray count]);
+//                NSLog(@"Notification canceled [%i]", [self.notificationsArray count]);
                 return YES;
             }
         }

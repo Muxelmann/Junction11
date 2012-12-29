@@ -20,7 +20,8 @@
 
 - (IBAction)loadOptionsView:(id)sender;
 - (IBAction)playButtonPressed:(UIButton *)sender;
-- (IBAction)playButtonPushed:(UIButton *)sender;
+- (IBAction)playButtonReleased:(UIButton *)sender;
+- (IBAction)playButtonReleasedOutside:(UIButton *)sender;
 
 - (void)updateStreamQuality;
 

@@ -83,9 +83,10 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="playButtonPressed:" destination="flk-kH-bwu" eventType="touchDown" id="RzM-TM-mjk"/>
-                                    <action selector="playButtonPushed:" destination="flk-kH-bwu" eventType="touchUpOutside" id="7Wc-0V-u1g"/>
-                                    <action selector="playButtonPushed:" destination="flk-kH-bwu" eventType="touchUpInside" id="tuy-yH-WcS"/>
+                                    <action selector="playButtonPressed:" destination="flk-kH-bwu" eventType="touchDown" id="GmI-ke-vg2"/>
+                                    <action selector="playButtonReleased:" destination="flk-kH-bwu" eventType="touchUpInside" id="qKs-97-kO1"/>
+                                    <action selector="playButtonReleasedOutside:" destination="flk-kH-bwu" eventType="touchUpOutside" id="aS2-W7-xS9"/>
+                                    <action selector="playButtonReleasedOutside:" destination="flk-kH-bwu" eventType="touchCancel" id="rYS-jT-Na0"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -773,7 +774,10 @@
             <relationships>
                 <relationship kind="action" name="loadOptionsView:"/>
                 <relationship kind="action" name="playButtonPressed:" candidateClass="UIButton"/>
-                <relationship kind="action" name="playButtonPushed:" candidateClass="UIButton"/>
+                <relationship kind="action" name="playButtonReleased:" candidateClass="UIButton"/>
+                <relationship kind="action" name="playButtonReleasedOutside:" candidateClass="UIButton"/>
+                <relationship kind="action" name="showShoutbox:" candidateClass="UISwipeGestureRecognizer"/>
+                <relationship kind="action" name="test:"/>
                 <relationship kind="outlet" name="optionsButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="playButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="shoutboxConstraint" candidateClass="NSLayoutConstraint"/>
@@ -815,6 +819,9 @@
         </class>
         <class className="ScheduleViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ScheduleViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="backButtonPressed:"/>
+            </relationships>
         </class>
         <class className="ShoutboxViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ShoutboxViewController.h"/>

@@ -31,9 +31,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    self.show = [self.storyboard instantiateViewControllerWithIdentifier:@"showMenuViewControllerID"];
-//    self.show.view.backgroundColor = [UIColor redColor];
-//    self.show.delegate = self;
     
     self.title = @"Schedule";
     
@@ -79,16 +76,14 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-//#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return [self.schedule numberOfDaysInSchedule];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//#warning Incomplete method implementation.
     // Return the number of rows in the section.
-        return [self.schedule numberOfShowsPerDay:section];
+    return [self.schedule numberOfShowsPerDay:section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -208,9 +203,6 @@
             NSRange range = NSMakeRange(0,table.numberOfSections);
             NSIndexSet *index = [NSIndexSet indexSetWithIndexesInRange:range];
             [table reloadSections:index withRowAnimation:UITableViewRowAnimationBottom];
-            
-//            [table reloadData];
-            
         }
     });
     

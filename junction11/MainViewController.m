@@ -184,9 +184,14 @@
 {
     sender.backgroundColor = [UIColor darkGrayColor];
 }
-- (IBAction)playButtonPushed:(UIButton *)sender
+- (IBAction)playButtonReleased:(UIButton *)sender
 {
     [self.stream playAndResume];
+}
+
+- (IBAction)playButtonReleasedOutside:(UIButton *)sender
+{
+    [self.stream update];
 }
 
 - (void)updateStreamQuality

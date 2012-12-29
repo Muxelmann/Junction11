@@ -53,9 +53,7 @@
     self.loadingWebcam.backgroundColor = [UIColor clearColor];
     
     self.highQualitySwitch.on = [self.delegate isHeighStreamEnabled];
-//    [self.highQualitySwitch setOn:[self.delegate isHeighStreamEnabled] animated:YES];
     self.notoficationsSwitch.on = [self.delegate areNotificationsEnabled];
-//    [self.notoficationsSwitch setOn:[self.delegate areNotificationsEnabled] animated:YES];
     
     [self updateNotificationButton];
     
@@ -98,14 +96,9 @@
     [(UITableView *)self.view reloadData];
     
     [self updateNotificationButton];
-    
-//    CGRect rect = self.webcam.frame;
-//    rect.size = CGSizeMake(self.view.bounds.size.height-2, self.view.bounds.size.width-2);
-//    self.webcam.frame = rect;
 }
 
 - (IBAction)switchFlicked:(UISwitch *)sender {
-    NSLog(@"Switch...");
     switch (sender.tag) {
         case 0: // Quality
             [self.delegate setHeighStreamEnabled:sender.isOn];
@@ -281,7 +274,7 @@
 - (void)updateWebcamThread
 {
     // Address to webcam feed
-    //    NSString *webcamURL = @"http://junction11.rusu.co.uk/wp-content/uploads/2011/01/webcam1-31-300x225.jpg";
+//    NSString *webcamURL = @"http://junction11.rusu.co.uk/wp-content/uploads/2011/01/webcam1-31-300x225.jpg";
     NSString *webcamURL = @"http://media.junction11radio.co.uk/webcams/webcam1.jpg";
     
     // Make URL and load image
@@ -298,7 +291,7 @@
     }
     
     // Apply image to background
-    self.webcam.contentMode = UIViewContentModeScaleToFill;// = UIViewContentModeCenter;
+    self.webcam.contentMode = UIViewContentModeScaleToFill;
     self.webcam.image = webcamImageRaw;
     
     // Stop the activity indicator
@@ -327,17 +320,6 @@
         self.manageNotificationsLabel.text = [NSString stringWithFormat:@"%i reminders", [self.delegate numberOfNotifications]];
     }
 }
-
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
-//    
-//    if (indexPath.section == 1 && indexPath.row == 0) {
-//        self.manageNotifications.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"glossButton.png"] stretchableImageWithLeftCapWidth:20.0 topCapHeight:0.0]];
-//        self.manageNotifications.selectedBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"glossButtonSelected.png"] stretchableImageWithLeftCapWidth:20.0 topCapHeight:0.0]];
-//    }
-//    return cell;
-//}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
