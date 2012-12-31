@@ -19,6 +19,7 @@
 
 @property (strong, nonatomic) AVPlayer *audioPlayer;
 @property BOOL heighStreamQuality;
+@property BOOL firstLaunch;
 
 @end
 
@@ -26,61 +27,98 @@
 @synthesize delegate = _delegate;
 @synthesize audioPlayer = _audioPlayer;
 @synthesize heighStreamQuality = _heighStreamQuality;
+@synthesize firstLaunch = _firstLaunch;
 
 - (id)init
 {
     self = [super init];
     if (self) {
         self.audioPlayer = [[AVPlayer alloc] init];
+        self.firstLaunch = YES;
     }
     return self;
 }
 
-- (void)setDelegate:(id<WebPlayerDelegate>)delegate
+- (void)play
 {
-    _delegate = delegate;
+    [self.delegate.loadingActivity startAnimating];
+    self.delegate.playButton.enabled = NO;
+    self.delegate.loadingActivity.hidesWhenStopped = YES;
+    [self.delegate.playButton setTitle:@"Loading..." forState:UIControlStateNormal];
+    
+    if (self.firstLaunch || [self.delegate isInHeighStream] != self.heighStreamQuality) {
+        NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(playThread) object:nil];
+        [thread start];
+    } else {
+        NSLog(@"PLAY... %@", self.audioPlayer);
+        [self.audioPlayer play];
+        [self update];
+    }
 }
 
-- (NSError *)play
+- (void)playThread
 {
     NSError *error = NULL;
+    UIButton *button = self.delegate.playButton;
     
-    if ([[self.delegate playButton] isKindOfClass:[UIButton class]]) {
-        UIButton *button = (UIButton *)[self.delegate playButton];
-    
-        if (self.audioPlayer && self.audioPlayer.rate == 0.0) {
+    if (self.audioPlayer && self.audioPlayer.rate == 0.0) {
         
-            NSURL *streamURL;
-            if ([self.delegate isInHeighStream]) {
-                streamURL = [NSURL URLWithString:TEST_ADDRESS_ONE];
-                self.heighStreamQuality = YES;
-            } else {
-                streamURL = [NSURL URLWithString:TEST_ADDRESS_TWO];
-                self.heighStreamQuality = NO;
-            }
-            
-            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: streamURL];
-            [request setHTTPMethod: @"HEAD"];
-            NSURLResponse *response;
-            NSData *myData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &error];
-            
-            if (myData) {
-                // we are probably reachable, check the response;
-                AVPlayerItem *newPlayer;
-                newPlayer = [AVPlayerItem playerItemWithURL:streamURL];
-                [self.audioPlayer replaceCurrentItemWithPlayerItem:newPlayer];
-                
-                [self.audioPlayer play];
-            }
+        NSURL *streamURL;
+        if ([self.delegate isInHeighStream]) {
+            streamURL = [NSURL URLWithString:HIGH_STREAM_ADDRESS];
+        } else {
+            streamURL = [NSURL URLWithString:LOW_STREAM_ADDRESS];
         }
         
-        if (!error) {
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: streamURL];
+        [request setHTTPMethod: @"HEAD"];
+        NSURLResponse *response;
+        NSData *myData = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &error];
+        
+        
+        if (myData && !error) {
+            self.firstLaunch = NO;
+            self.heighStreamQuality = [self.delegate isInHeighStream];
+            
+            // we are probably reachable, check the response;
+            AVPlayerItem *newPlayer;
+            newPlayer = [AVPlayerItem playerItemWithURL:streamURL];
+            [self.audioPlayer replaceCurrentItemWithPlayerItem:newPlayer];
+            
+            [self.audioPlayer play];
+            
             button.backgroundColor = [UIColor colorWithRed:.1 green:.6 blue:.1 alpha:1.0];
             [button setTitle:@"Pause" forState:UIControlStateNormal];
-        } else
-            button.backgroundColor = [UIColor blackColor];
+            
+        } else {
+            NSLog(@"ERROR connecting to stream...\n%@", error);
+            [self performSelectorOnMainThread:@selector(errorConnecting) withObject:nil waitUntilDone:NO];
+            button.backgroundColor = [UIColor colorWithRed:0.8 green:0.1 blue:0.1 alpha:1.0];
+            [button setTitle:@"Error" forState:UIControlStateNormal];
+        }
+        
+        [self.delegate.loadingActivity stopAnimating];
+        self.delegate.playButton.enabled = YES;
     }
-    return error;
+}
+
+- (void)errorConnecting
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"SORRY"
+                                                        message:@"But I can not connect to the Junction11 stream...\nWe're probably not broadcasting right now (due to holidays or so)."
+                                                       delegate:self
+                                              cancelButtonTitle:@"Fair enough"
+                                              otherButtonTitles:@"Tell the admin", nil];
+    [alertView show];
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;{
+ 
+    if (buttonIndex == 1)
+    {
+        NSLog(@"Tell Admin...");
+        //do something here...
+    }
 }
 
 - (BOOL)isPlaying
@@ -103,38 +141,37 @@
 
 - (void)playAndResume
 {
-
+    
     if ([[self.delegate playButton] isKindOfClass:[UIButton class]]) {
         if ([self isPlaying]) {
             [self pause];
         } else {
-            NSError *error = [self play];
-            if (error) NSLog(@"ERROR %@", error);
+            [self play];
         }
     }
-
+    
 }
 
 - (void)remoteControlReceivedOfType:(UIEventSubtype)type
 {
     NSLog(@"Control Received %i", type);
     if ([self.delegate playButton])
-    switch (type) {
-        case UIEventSubtypeRemoteControlTogglePlayPause:
-            [self playAndResume];
-            break;
-            
-        case UIEventSubtypeRemoteControlPause:
-            [self pause];
-            break;
-            
-        case UIEventSubtypeRemoteControlPlay:
-            [self play];
-            break;
-            
-        default:
-            break;
-    }
+        switch (type) {
+            case UIEventSubtypeRemoteControlTogglePlayPause:
+                [self playAndResume];
+                break;
+                
+            case UIEventSubtypeRemoteControlPause:
+                [self pause];
+                break;
+                
+            case UIEventSubtypeRemoteControlPlay:
+                [self play];
+                break;
+                
+            default:
+                break;
+        }
 }
 
 - (void)update
@@ -146,6 +183,8 @@
         [self.delegate playButton].backgroundColor = [UIColor colorWithRed:.9 green:.6 blue:.0 alpha:1.0];
         [[self.delegate playButton] setTitle:@"Resume" forState:UIControlStateNormal];
     }
+    [self.delegate.loadingActivity stopAnimating];
+    self.delegate.playButton.enabled = YES;
 }
 
 @end

@@ -259,57 +259,11 @@
 
 - (NSString *)infoForShow:(NSInteger)show onDay:(NSInteger)day
 {
-//    NSInteger numberOfPastShows = [self numberOfShowsBefore:show onDay:day];
-    
-//    float time = [[[self.schedule objectAtIndex:numberOfPastShows+show] objectForKey:@"<time>"] floatValue];
-//    float duration = [[[self.schedule objectAtIndex:numberOfPastShows+show] objectForKey:@"<duration>"] floatValue];
-//    
-//    // Compute now and the calendar used
-//    NSDate *nowDate = [NSDate date];
-////    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-////    NSCalendar *gregorian = [NSCalendar currentCalendar];
-//    
-//    // Get the weekday component of the current date
-//    NSDateComponents *now = [self.gregorian components:NSWeekdayCalendarUnit fromDate:nowDate];
-//    
-//    // Find out how many components differ between the beginning and now
-//    NSDateComponents *differenceToBeginningOfWeek = [[NSDateComponents alloc] init];
-////    [differenceToBeginningOfWeek setDay: - ([now weekday] - [gregorian firstWeekday])];
-//    differenceToBeginningOfWeek.day = - ([now weekday] - [self.gregorian firstWeekday]);
-//    
-//    // Compute the beginning of the week and normalise time to zero.
-//    NSDate *beginningOfWeek = [self.gregorian dateByAddingComponents:differenceToBeginningOfWeek toDate:nowDate options:0];
-//    NSDateComponents *components = [self.gregorian components: (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit)
-//                                                fromDate: beginningOfWeek];
-//    beginningOfWeek = [self.gregorian dateFromComponents: components];
-//            
-//    NSDateComponents *startDifference = [[NSDateComponents alloc] init];
-////    startDifference.hour = (NSInteger)time;
-//
-//    startDifference.minute = time * 60;
-//    startDifference.day = day;
-//
-//    NSDate *start = [self.gregorian dateByAddingComponents:startDifference toDate:beginningOfWeek options:0];
-
-//    NSDate *start = [self startingTimeOfShow:show onDay:day];
-    
-//    NSLog(@"START %@", start);
-    
-//    NSDateComponents *endDifference = [[NSDateComponents alloc] init];
-//    
-////    endDifference.hour = (NSInteger)duration;
-//    endDifference.minute = duration * 60;
-//    
-//    NSDate *end = [self.gregorian dateByAddingComponents:endDifference toDate:start options:0];
-    
-//    NSLog(@"END %@\n", endDifference);
     
     NSDate *start = [self startingTimeOfShow:show onDay:day];
     NSDate *end = [self endingTimeOfShow:show onDay:day];
     
     NSString *returnString = [[NSString alloc] init];
-//    returnString = [returnString stringByAppendingString:[NSDateFormatter localizedStringFromDate:start dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle]];
-//    returnString = [returnString stringByAppendingString:@" from "];
     returnString = [returnString stringByAppendingString:[NSDateFormatter localizedStringFromDate:start dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle]];
     returnString = [returnString stringByAppendingString:@" to "];
     returnString = [returnString stringByAppendingString:[NSDateFormatter localizedStringFromDate:end dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle]];
@@ -394,5 +348,79 @@
 //    
 //    return test;
 }
+
+- (NSString *)currentShow
+{
+    if ([self.schedule count] == 0) [self update];
+    
+    for (int d = 0; d < 7; d ++) {
+        for (int s = 0; s < [self numberOfShowsPerDay:d]; d++) {
+            NSDate *time = [self startingTimeOfShow:s onDay:d];
+            NSDate *now = [NSDate date];
+            
+            unsigned int flags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit;
+            
+            NSDateComponents* timeC = [self.gregorian components:flags fromDate:time];
+            NSDateComponents* nowC = [self.gregorian components:flags fromDate:now];
+            
+//            NSLog(@"D %i = %i", timeC.weekday, nowC.weekday);
+            if (timeC.weekday == nowC.weekday) { // Day is identical
+//                NSLog(@"h %i <= %i", timeC.hour, nowC.hour);
+                if (timeC.hour <= nowC.hour) { // Show is same hour or earlier
+//                    NSLog(@"m %i <= %i", timeC.minute, nowC.minute);
+                    if (timeC.minute <= nowC.minute) {
+                        return [self titleForShow:s onDay:d];
+                    }
+                }
+            }
+        }
+    }
+    
+//    NSLog(@"NO show found... %i", [self.schedule count]);
+    return @"Don't know what's playing...";
+}
+
+- (NSString *)nextShow
+{
+    if ([self.schedule count] == 0) [self update];
+    
+    for (int d = 0; d < 7; d ++) {
+        for (int s = 0; s < [self numberOfShowsPerDay:d]; d++) {
+            NSDate *time = [self startingTimeOfShow:s onDay:d];
+            NSDate *now = [NSDate date];
+            
+            unsigned int flags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit;
+            
+            NSDateComponents* timeC = [self.gregorian components:flags fromDate:time];
+            NSDateComponents* nowC = [self.gregorian components:flags fromDate:now];
+            
+//            NSLog(@"D %i = %i", timeC.weekday, nowC.weekday);
+            if (timeC.weekday == nowC.weekday) {
+                // Day is identical
+//                NSLog(@"h %i <= %i", timeC.hour, nowC.hour);
+                if (timeC.hour <= nowC.hour) {
+                    // Show is same hour or earlier
+//                    NSLog(@"m %i <= %i", timeC.minute, nowC.minute);
+                    if (timeC.minute <= nowC.minute) {
+                        s++;
+                        if (s == [self numberOfShowsPerDay:d]-1) {
+                            // Last show of the day, add 1 to day and reset show ot 0
+                            d++;
+                            s = 0;
+                            if (d >= 7) {
+                                // Last show of week, reset day to 0
+                                d = 0;
+                            }
+                        }
+                        return [self titleForShow:s onDay:d];
+                    }
+                }
+            }
+        }
+    }
+    
+    return @"Don't know what's playing next...";
+}
+
 
 @end

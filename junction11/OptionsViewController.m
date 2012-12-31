@@ -86,7 +86,7 @@
 {
     [super viewWillAppear:animated];
     
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+    if ([UIDevice.currentDevice userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         self.descriptionBox.bounds = CGRectMake(0, 0, self.view.bounds.size.width-20, 318);
     } else {
         self.descriptionBox.bounds = CGRectMake(0, 0, self.view.bounds.size.width-70, 318);

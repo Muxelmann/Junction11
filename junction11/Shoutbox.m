@@ -39,7 +39,7 @@
 - (BOOL)shoutMessage:(NSString *)message byUser:(NSString *)user WithCode:(NSInteger)code
 {
     if (code == self.code) {
-        user = [user stringByAppendingFormat:@"via iOS version [%@] device [%@]", [UIDevice currentDevice].systemVersion, [UIDevice currentDevice].name];
+        user = [user stringByAppendingFormat:@"via iOS version [%@] device [%@]", UIDevice.currentDevice.systemVersion, UIDevice.currentDevice.name];
         
         NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:URL]];
         request.HTTPMethod = @"POST";

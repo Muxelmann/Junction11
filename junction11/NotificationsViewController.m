@@ -133,7 +133,7 @@
         if ([self.delegate numberOfNotifications] < 1) {
             if ([self.parentViewController isKindOfClass:[NotificationNavigationController class]]) {
                 NotificationNavigationController *navigationController = (NotificationNavigationController *)self.parentViewController;
-                if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+                if ([UIDevice.currentDevice userInterfaceIdiom] == UIUserInterfaceIdiomPad)
                     [navigationController.popover dismissPopoverAnimated:YES];
                 else {
                     [self doneButton:NULL];

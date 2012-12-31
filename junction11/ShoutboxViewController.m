@@ -11,7 +11,7 @@
 
 #define MAX_CHARACTERS_IN_MESSAGE 200
 
-@interface ShoutboxViewController () <UITextViewDelegate>
+@interface ShoutboxViewController () <UITextViewDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *userName;
 @property (weak, nonatomic) IBOutlet UITextView *message;
@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UISlider *slider;
 @property (weak, nonatomic) IBOutlet UIButton *shoutButton;
 @property (weak, nonatomic) IBOutlet UILabel *charCounter;
+@property (weak, nonatomic) IBOutlet UIView *backgorundView;
 
 @property (strong, nonatomic) Shoutbox *shoutbox;
 
@@ -31,8 +32,8 @@
 @synthesize codeShould = _codeShould;
 @synthesize codeIs = _codeIs;
 @synthesize slider = _slider;
-@synthesize shoutbox = _shoutbox;
 @synthesize charCounter = _charCounter;
+@synthesize shoutbox = _shoutbox;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -50,14 +51,18 @@
     
     // Setup shoutbox object
     self.shoutbox = [[Shoutbox alloc] init];
-    [CustomButtons makeOverlayWithColor:[UIColor blueColor] toView:self.view];
     
     // Setup view
+    self.backgorundView.backgroundColor = [UIColor clearColor];
+//    self.view.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.5 alpha:0.5];
     self.view.backgroundColor = [UIColor clearColor];
     self.slider.continuous = YES;
     self.slider.minimumValue = 0;
     self.slider.maximumValue = 9;
     self.slider.value = 5;
+    
+    self.userName.textAlignment = NSTextAlignmentCenter;
+    self.userName.placeholder = UIDevice.currentDevice.name;
     
     self.message.text = @"";
     self.charCounter.text = [NSString stringWithFormat:@"%i", MAX_CHARACTERS_IN_MESSAGE];
@@ -76,6 +81,18 @@
     [self.shoutButton setTitle:@"Shout" forState:UIControlStateNormal];
     [CustomButtons makeButtonGlossy:self.shoutButton];
     self.shoutButton.backgroundColor = [UIColor colorWithRed:.8 green:.0 blue:.0 alpha:1.0];
+    
+    // Hide keyboard when swiping down whilst editing
+    UISwipeGestureRecognizer *hideKeyboard = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboardSwipe:)];
+    hideKeyboard.direction = UISwipeGestureRecognizerDirectionDown;
+    [self.view addGestureRecognizer:hideKeyboard];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [CustomButtons makeOverlayWithColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.5 alpha:0.5] toView:self.backgorundView];
+//    [CustomButtons applyOverlaytoView:self.view];
 }
 
 - (void)didReceiveMemoryWarning
@@ -113,8 +130,10 @@
             self.message.text = @"";
             NSLog(@"SUCCESS");
         }
-        if ([self.message isFirstResponder])
+        if (self.message.isFirstResponder)
             [self.message resignFirstResponder];
+        
+        [self.delegate showShoutbox:NULL];
     }
     
     // Reset button color immediately
@@ -135,6 +154,25 @@
     }
     
     return NO;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if ([string isEqualToString:@"\n"]) {
+        [textField resignFirstResponder];
+    } else if (textField.text.length - range.length + string.length <= 30) {
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (IBAction)hideKeyboardSwipe:(id)sender
+{
+    if (self.message.isFirstResponder)
+        [self.message resignFirstResponder];
+    else if (self.userName.isFirstResponder)
+        [self.userName resignFirstResponder];
 }
 
 @end

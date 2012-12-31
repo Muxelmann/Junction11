@@ -29,4 +29,7 @@
 
 - (NSInteger *)beginningOfWeek;
 
+- (NSString *)currentShow;
+- (NSString *)nextShow;
+
 @end

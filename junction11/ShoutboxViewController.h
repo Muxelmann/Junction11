@@ -9,10 +9,20 @@
 #import <UIKit/UIKit.h>
 #import "Shoutbox.h"
 
+@protocol ShoutboxDelegate;
+
 @interface ShoutboxViewController : UIViewController
+
+@property (nonatomic, assign) id<ShoutboxDelegate> delegate;
 
 - (IBAction)codeUpdate:(id)sender;
 - (IBAction)pushShout:(id)sender;
 - (IBAction)shout:(id)sender;
+
+@end
+
+@protocol ShoutboxDelegate <NSObject>
+
+- (IBAction)showShoutbox:(UISwipeGestureRecognizer *)recognizer;
 
 @end

@@ -14,9 +14,18 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *optionsButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *shoutboxConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *shoutboxPlayButtonConstraint;
+@property (weak, nonatomic) IBOutlet UILabel *onAirTop;
+@property (weak, nonatomic) IBOutlet UILabel *onAirBottom;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *onAirTopConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *onAirBottomConstraint;
+@property (weak, nonatomic) IBOutlet UIImageView *infoImage;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *infoImageConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *borderConstraint;
+
 @property (strong, nonatomic) WebRadioStream *stream;
 @property (strong, nonatomic) UISwipeGestureRecognizer *swipeGestureOptions;
 @property (strong, nonatomic) UISwipeGestureRecognizer *swipeGestureShoutbox;
+@property (strong, nonatomic) NSTimer *showDisplay;
 
 @end
 
@@ -24,12 +33,21 @@
 @synthesize delegate = _delegate;
 @synthesize stream = _stream;
 @synthesize playButton = _playButton;
+@synthesize loadingActivity = _loadingActivity;
 @synthesize optionsButton = _optionsButton;
 @synthesize shoutboxConstraint = _shoutboxConstraint;
 @synthesize shoutboxPlayButtonConstraint = _shoutboxPlayButtonConstraint;
+@synthesize onAirTop = _onAirTop;
+@synthesize onAirBottom = _onAirBottom;
+@synthesize onAirTopConstraint = _onAirTopConstraint;
+@synthesize infoImage = _infoImage;
+@synthesize infoImageConstraint = _infoImageConstraint;
+@synthesize borderConstraint = _borderConstraint;
+
 @synthesize swipeGestureOptions = _swipeGestureOptions;
 @synthesize swipeGestureShoutbox = _swipeGestureShoutbox;
 @synthesize schedule = _schedule;
+@synthesize showDisplay = _showDisplay;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -44,13 +62,15 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-
+    
     // Set up delegates and subviews first
     self.stream.delegate = self;
+    
     for (UIView *view in self.view.subviews)
         if ([view.restorationIdentifier isEqualToString:@"shoutboxID"]) {
             view.backgroundColor = [UIColor clearColor];
             view.autoresizingMask = UIViewAutoresizingNone;
+            
         }
     
     self.view.userInteractionEnabled = YES;
@@ -60,11 +80,51 @@
     self.swipeGestureOptions.direction = UISwipeGestureRecognizerDirectionRight;
     [self.view addGestureRecognizer:self.swipeGestureOptions];
     
-    self.shoutboxConstraint.constant = -237;
-    // Gesture to display shoutbox
+    // Gesture to display shoutbox & move play button
     self.swipeGestureShoutbox = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showShoutbox:)];
     self.swipeGestureShoutbox.direction = UISwipeGestureRecognizerDirectionDown;
     [self.view addGestureRecognizer:self.swipeGestureShoutbox];
+    
+    
+    if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+        self.shoutboxConstraint.constant = -237;
+        self.shoutboxPlayButtonConstraint.constant = 84;
+        self.onAirTopConstraint.constant = 60;
+        self.onAirBottomConstraint.constant = 10;
+        self.infoImageConstraint.constant = 0;
+    } else {
+        self.shoutboxConstraint.constant = -360;
+        self.shoutboxPlayButtonConstraint.constant = 175;
+        self.onAirTopConstraint.constant = 100;
+        self.onAirBottomConstraint.constant = 10;
+        self.infoImageConstraint.constant = 0;
+    }
+    
+    // Layout the onAir Label
+    self.onAirTop.textAlignment = NSTextAlignmentLeft;
+    self.onAirTop.font = [UIFont systemFontOfSize:14];
+    self.onAirTop.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+    self.onAirTop.text = @"Current Show";
+    
+    self.onAirBottom.textAlignment = NSTextAlignmentCenter;
+    self.onAirBottom.font = [UIFont boldSystemFontOfSize:15];
+    self.onAirBottom.textColor = [UIColor whiteColor];
+    self.onAirBottom.text = @"";
+//    self.onAirBottom.text = [self.schedule currentShow];
+    
+    self.showDisplay = [[NSTimer alloc] initWithFireDate:[NSDate date] interval:10 target:self selector:@selector(updateShowDisplay:) userInfo:nil repeats:YES];
+    NSRunLoop * theRunLoop = [NSRunLoop currentRunLoop];
+    [theRunLoop addTimer:self.showDisplay forMode:NSDefaultRunLoopMode];
+    
+    // Info image
+    self.infoImage.backgroundColor = [UIColor clearColor];
+    self.infoImage.contentMode = UIViewContentModeTop;
+    if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+        self.infoImage.image = [UIImage imageNamed:@"junction11.png"];
+    else
+        self.infoImage.image = [UIImage imageNamed:@"junction11pad.png"];
+    
+    self.borderConstraint.constant = -20;
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:YES];
 
@@ -90,7 +150,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"showSchedule"]) {
-
+        
         if ([segue.destinationViewController isKindOfClass:[ScheduleNavigationController class]]) {
             ScheduleNavigationController *navigationController = (ScheduleNavigationController *)segue.destinationViewController;
             navigationController.scheduleDelegate = self.delegate;
@@ -103,6 +163,14 @@
                 }
             }
         }
+        
+    } else if ([segue.identifier isEqualToString:@"loadShoutbox"]){
+        
+        if ([segue.destinationViewController isKindOfClass:[ShoutboxViewController class]]) {
+            ShoutboxViewController *shoutboxController = (ShoutboxViewController *)segue.destinationViewController;
+            shoutboxController.delegate = self;
+        }
+        
     }
 }
 
@@ -126,7 +194,7 @@
     
     CGRect rect = self.view.frame;
     CGFloat constant = 259;
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+    if ([UIDevice.currentDevice userInterfaceIdiom] == UIUserInterfaceIdiomPad)
         constant = 320;
     
     if (self.swipeGestureOptions.direction == UISwipeGestureRecognizerDirectionLeft) {
@@ -156,20 +224,91 @@
 
 - (IBAction)showShoutbox:(UISwipeGestureRecognizer *)recognizer
 {
-    if (recognizer.direction == UISwipeGestureRecognizerDirectionDown) {
-        recognizer.direction = UISwipeGestureRecognizerDirectionUp;
-        [UIView animateWithDuration:0.5 animations:^{
-            self.shoutboxConstraint.constant = 44;
-            self.shoutboxPlayButtonConstraint.constant = 20;
-            [self.view layoutIfNeeded];
-        }];
+    if (self.swipeGestureShoutbox.direction == UISwipeGestureRecognizerDirectionDown) {
+        self.swipeGestureShoutbox.direction = UISwipeGestureRecognizerDirectionUp;
+        
+        if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+            [UIView animateWithDuration:0.5 animations:^{
+                self.shoutboxConstraint.constant = 44;
+                self.shoutboxPlayButtonConstraint.constant = 20;
+                self.onAirTopConstraint.constant = 20;
+                self.infoImageConstraint.constant = -self.infoImage.bounds.size.height;
+                [self.view layoutIfNeeded];
+            }];
+        } else {
+            [UIView animateWithDuration:0.5 animations:^{
+                self.shoutboxConstraint.constant = 44;
+                self.shoutboxPlayButtonConstraint.constant = 90;
+                self.onAirTopConstraint.constant = 50;
+                NSLog(@"OR %i ", UIInterfaceOrientationIsLandscape(UIDevice.currentDevice.orientation));
+                if (UIInterfaceOrientationIsLandscape(UIDevice.currentDevice.orientation))
+                    self.infoImageConstraint.constant = -self.infoImage.bounds.size.height;
+                
+                [self.view layoutIfNeeded];
+            }];
+        }
     } else {
-        recognizer.direction = UISwipeGestureRecognizerDirectionDown;
-        [UIView animateWithDuration:0.5 animations:^{
-            self.shoutboxConstraint.constant = -237;
-            self.shoutboxPlayButtonConstraint.constant = 64;
-            [self.view layoutIfNeeded];
+        self.swipeGestureShoutbox.direction = UISwipeGestureRecognizerDirectionDown;
+        
+        if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+            [UIView animateWithDuration:0.5 animations:^{
+                self.shoutboxConstraint.constant = -237;
+                self.shoutboxPlayButtonConstraint.constant = 84;
+                self.onAirTopConstraint.constant = 60;
+                self.infoImageConstraint.constant = 0;
+                [self.view layoutIfNeeded];
+            }];
+        } else {
+            [UIView animateWithDuration:0.5 animations:^{
+                self.shoutboxConstraint.constant = -360;
+                self.shoutboxPlayButtonConstraint.constant = 180;
+                self.onAirTopConstraint.constant = 100;
+                self.infoImageConstraint.constant = 0;
+                [self.view layoutIfNeeded];
+            }];
+        }
+    }
+}
+
+- (IBAction)updateShowDisplay:(id)sender
+{
+    
+    [UILabel animateWithDuration:0.25 animations:^{
+ 
+        [self.onAirTop setAlpha:0.0];
+        [self.onAirBottom setAlpha:0.0];
+        
+    } completion:^(BOOL finished){
+        
+        if ([self.onAirTop.text isEqualToString:@"Current Show"]) {
+            self.onAirTop.text = @"Next show";
+            self.onAirBottom.text = [self.schedule nextShow];
+        } else {
+            self.onAirTop.text = @"Current Show";
+            self.onAirBottom.text = [self.schedule currentShow];
+        }
+        
+        [UILabel animateWithDuration:0.25 animations:^{
+            
+            [self.onAirTop setAlpha:1.0];
+            [self.onAirBottom setAlpha:1.0];
+            
         }];
+    }];
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
+            if (self.swipeGestureShoutbox.direction == UISwipeGestureRecognizerDirectionUp) {
+                self.infoImageConstraint.constant = -self.infoImage.bounds.size.height;
+            } else {
+                self.infoImageConstraint.constant = 0;
+            }
+        } else {
+            self.infoImageConstraint.constant = 0;
+        }
     }
 }
 
@@ -182,16 +321,22 @@
 
 - (IBAction)playButtonPressed:(UIButton *)sender
 {
-    sender.backgroundColor = [UIColor darkGrayColor];
+    // Only do something if Options are NOT visible
+    if (self.swipeGestureOptions.direction == UISwipeGestureRecognizerDirectionRight)
+        sender.backgroundColor = [UIColor darkGrayColor];
 }
 - (IBAction)playButtonReleased:(UIButton *)sender
 {
-    [self.stream playAndResume];
+    // Only do something if Options are NOT visible
+    if (self.swipeGestureOptions.direction == UISwipeGestureRecognizerDirectionRight)
+        [self.stream playAndResume];
 }
 
 - (IBAction)playButtonReleasedOutside:(UIButton *)sender
 {
-    [self.stream update];
+    // Only do something if Options are NOT visible
+    if (self.swipeGestureOptions.direction == UISwipeGestureRecognizerDirectionRight)
+        [self.stream update];
 }
 
 - (void)updateStreamQuality
@@ -265,7 +410,7 @@
 }
 
 #pragma mark Debugging code
-
+/*
 - (IBAction)test:(id)sender {
     NSLog(@"STREAM %@", ([self.delegate isHeighStreamEnabled]) ? @"YES" : @"NO");
     NSLog(@"NOTIFICATION %@", ([self.delegate areNotificationsEnabled]) ? @"YES" : @"NO");
@@ -295,5 +440,5 @@
     
     NSLog(@"Test Notification scheduled...");
 }
-
+*/
 @end

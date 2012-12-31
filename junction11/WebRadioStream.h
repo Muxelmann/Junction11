@@ -14,12 +14,10 @@
 
 @property (nonatomic, assign) id<WebPlayerDelegate> delegate;
 
-//- (NSError *)play;
 - (BOOL)isPlaying;
 - (void)pause;
 - (void)remoteControlReceivedOfType:(UIEventSubtype)type;
 - (void)update;
-//- (void)resume;
 
 - (void)playAndResume;
 
@@ -28,6 +26,7 @@
 @protocol WebPlayerDelegate <NSObject>
 
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingActivity;
 
 - (BOOL)isInHeighStream;
 

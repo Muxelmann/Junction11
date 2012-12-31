@@ -44,7 +44,7 @@
         viewController.schedule = self.schedule;
     }
     
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+    if ([UIDevice.currentDevice userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         self.navigationBar.barStyle = UIBarStyleBlack;
     }
 }
