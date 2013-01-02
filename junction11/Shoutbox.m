@@ -9,6 +9,7 @@
 #import "Shoutbox.h"
 
 #define URL @"http://gerfficient.com/app/mail.php"
+#define JUNCTION_11_URL @""
 
 @interface Shoutbox ()
 @property NSInteger code;

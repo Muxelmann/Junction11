@@ -8,8 +8,9 @@
 
 #import "MainViewController.h"
 #import "CustomButtons.h"
+#import <MessageUI/MessageUI.h>
 
-@interface MainViewController ()
+@interface MainViewController () <MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *optionsButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *shoutboxConstraint;
@@ -355,6 +356,39 @@
     [self becomeFirstResponder];
 }
 
+- (void)presentMailForAdminNotificationOfError:(NSError *)error
+{
+    if ([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];
+        mail.mailComposeDelegate = self;
+        [mail setToRecipients:[NSArray arrayWithObject:@"tech@junction11radio.co.uk"]];
+        [mail setSubject:@"Could not connect to server"];
+        NSString *body = [NSString stringWithFormat:@"<html><head><style> #description { padding: 7px; width: 90%%; background: #ccc; border-radius: 5px; font-family: Menlo; color: #444; font-size: 10px;}</style></head><body><p>Details: </p><p id=\"description\">%@</p></body></html>", error];
+        [mail setMessageBody:body isHTML:YES];
+        [self presentViewController:mail animated:YES completion:^{
+            
+        }];
+    } else {
+        NSLog(@"Can not contact admin...");
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"SORRY AGAIN"
+                                                            message:@"But I can not contact the Junction11 admin...\nProbably because you do not have an email address on this device."
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+        [alertView show];
+    }
+}
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    if (!error) {
+        [controller dismissViewControllerAnimated:YES completion:^{
+            NSLog(@"Admin contacted!");
+        }];
+    } else {
+        NSLog(@"Error contacting admin:\n%@", error);
+    }
+}
 
 #pragma mark - Player iPod controlls
 

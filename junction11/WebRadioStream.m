@@ -20,6 +20,7 @@
 @property (strong, nonatomic) AVPlayer *audioPlayer;
 @property BOOL heighStreamQuality;
 @property BOOL firstLaunch;
+@property (strong, nonatomic) NSError *errorConnecting;
 
 @end
 
@@ -92,7 +93,7 @@
             
         } else {
             NSLog(@"ERROR connecting to stream...\n%@", error);
-            [self performSelectorOnMainThread:@selector(errorConnecting) withObject:nil waitUntilDone:NO];
+            [self performSelectorOnMainThread:@selector(errorConnecting:) withObject:error waitUntilDone:NO];
             button.backgroundColor = [UIColor colorWithRed:0.8 green:0.1 blue:0.1 alpha:1.0];
             [button setTitle:@"Error" forState:UIControlStateNormal];
         }
@@ -102,13 +103,14 @@
     }
 }
 
-- (void)errorConnecting
+- (void)errorConnecting:(NSError *)error
 {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"SORRY"
                                                         message:@"But I can not connect to the Junction11 stream...\nWe're probably not broadcasting right now (due to holidays or so)."
                                                        delegate:self
                                               cancelButtonTitle:@"Fair enough"
                                               otherButtonTitles:@"Tell the admin", nil];
+    self.errorConnecting = error;
     [alertView show];
 }
 
@@ -117,7 +119,18 @@
     if (buttonIndex == 1)
     {
         NSLog(@"Tell Admin...");
-        //do something here...
+        [self.delegate presentMailForAdminNotificationOfError:self.errorConnecting];
+        /*
+        if ([MFMailComposeViewController canSendMail]) {
+            MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];
+            [mail setToRecipients:[NSArray arrayWithObject:@"muxelmann@gmail.com"]];
+            [mail setSubject:@"Could not connect to server"];
+            [mail setMessageBody:@"<HTML>An error occured when connecting to the Junction11 stream. Details:</HTML>" isHTML:YES];
+        } else {
+            NSLog(@"Sorry, I can not send an email...");
+        }
+         */
+        
     }
 }
 

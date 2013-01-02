@@ -93,7 +93,10 @@
         CGFloat blue = components[2];
 
         CAGradientLayer *gradient = [[CAGradientLayer alloc] init];
-        gradient.frame = CGRectMake(0, 0, view.bounds.size.width, view.bounds.size.height-borderWidth);
+        if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+            gradient.frame = CGRectMake(0, 0, view.bounds.size.width, view.bounds.size.height-borderWidth);
+        else
+            gradient.frame = CGRectMake(0, 0, 1024, view.bounds.size.height-borderWidth);
         
         gradient.colors = [NSArray arrayWithObjects:
                            (id)[[UIColor colorWithRed:red green:green blue:blue alpha:0.2f] CGColor],
@@ -115,8 +118,11 @@
     
     CAGradientLayer *bottomBorder = [[CAGradientLayer alloc] init];
     
-    bottomBorder.frame = CGRectMake(0.0f, view.bounds.size.height-borderWidth, view.bounds.size.width, borderWidth);
+    if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+        bottomBorder.frame = CGRectMake(0.0f, view.bounds.size.height-borderWidth, view.bounds.size.width, borderWidth);
 //    bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+    else
+        bottomBorder.frame = CGRectMake(0.0f, view.bounds.size.height-borderWidth, 1024, borderWidth);
     
     bottomBorder.colors = [NSArray arrayWithObjects:
                            (id)[[UIColor colorWithWhite:0.0 alpha:1.0] CGColor],

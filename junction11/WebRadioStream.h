@@ -29,5 +29,6 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingActivity;
 
 - (BOOL)isInHeighStream;
+- (void)presentMailForAdminNotificationOfError:(NSError *)error;
 
 @end
