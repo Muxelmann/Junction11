@@ -344,7 +344,14 @@
 {
     if ([self.stream isPlaying]) {
         [self.stream pause];
+        self.stream = nil;
+        self.stream = [[WebRadioStream alloc] init];
+        self.stream.delegate = self;
         [self.stream playAndResume];
+    } else {
+        self.stream = nil;
+        self.stream = [[WebRadioStream alloc] init];
+        self.stream.delegate = self;
     }
 }
 
