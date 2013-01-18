@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+// This object simply generates custom buttons so that the code needn't be rewritten
 @interface CustomButtons : NSObject
 
 + (void)makeButtonGlossy:(UIButton *)sender;

@@ -10,6 +10,7 @@
 
 @protocol WebPlayerDelegate;
 
+// This object deals with the Junction11 stream and play/pause button look
 @interface WebRadioStream : NSObject
 
 @property (nonatomic, assign) id<WebPlayerDelegate> delegate;

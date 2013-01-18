@@ -12,6 +12,7 @@
 
 @protocol OptionViewDelegate;
 
+// The table containing all settings
 @interface OptionsViewController : UITableViewController <NotidicationButtonDelegate>
 
 @property (nonatomic, assign) id<OptionViewDelegate, ManageNotificationsDelegate> delegate;

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "NotificationsViewController.h"
 
+// A navigation controller to controll the navigation bar items for all notifications
 @interface NotificationNavigationController : UINavigationController
 
 @property (nonatomic, assign) id<ManageNotificationsDelegate> notificationsDelegate;

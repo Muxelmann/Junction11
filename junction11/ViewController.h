@@ -12,14 +12,8 @@
 #import "MainViewController.h"
 #import "Schedule.h"
 
+// The main view controller that displays the player and options
 @interface ViewController : UIViewController <OptionViewDelegate, MainViewDelegate, ShowViewDelegate, ShowSchedulingDelegate, ManageNotificationsDelegate, ScheduleDataSource>
 
-//- (void)setHeighStreamEnabled:(bool)isEnabled;
-//- (void)setNotificationsEnabled:(bool)isEnabled;
-
-//@property (nonatomic) BOOL isInHeighStream;
-//@property (nonatomic) BOOL areNotificationsEnabled;
-//- (BOOL)isInHeighStream;
-//- (BOOL)areNotificationsEnabled;
 
 @end

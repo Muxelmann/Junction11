@@ -16,7 +16,6 @@
 			<array>
 				<string>icon_114.png</string>
 				<string>icon_57.png</string>
-				<string>icon 1.png</string>
 				<string>icon_72.png</string>
 				<string>icon_144.png</string>
 			</array>
@@ -31,11 +30,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>2.0.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.0</string>
+	<string>201</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIBackgroundModes</key>

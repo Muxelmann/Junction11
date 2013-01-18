@@ -12,11 +12,11 @@
 @protocol ShowDataSource;
 @protocol ShowSchedulingDelegate;
 
+// The individual show with notifications and facebook links
 @interface ShowViewController : UITableViewController
 
 @property (nonatomic, assign) id<ShowViewDelegate, ShowSchedulingDelegate> delegate;
 @property (nonatomic, assign) id<ShowDataSource> dataSource;
-//@property (nonatomic, assign) id<ShowSchedulingDelegate> notificationsDelegate;
 
 @end
 

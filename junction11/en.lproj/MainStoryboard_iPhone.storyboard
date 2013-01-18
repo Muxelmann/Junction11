@@ -796,6 +796,96 @@
         <image name="border.png" width="320" height="200"/>
         <image name="cal.png" width="24" height="24"/>
     </resources>
+    <classes>
+        <class className="MainViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MainViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="loadOptionsView:"/>
+                <relationship kind="action" name="playButtonPressed:" candidateClass="UIButton"/>
+                <relationship kind="action" name="playButtonReleased:" candidateClass="UIButton"/>
+                <relationship kind="action" name="playButtonReleasedOutside:" candidateClass="UIButton"/>
+                <relationship kind="action" name="showShoutbox:" candidateClass="UISwipeGestureRecognizer"/>
+                <relationship kind="action" name="updateShowDisplay:"/>
+                <relationship kind="outlet" name="borderConstraint" candidateClass="NSLayoutConstraint"/>
+                <relationship kind="outlet" name="infoImage" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="infoImageConstraint" candidateClass="NSLayoutConstraint"/>
+                <relationship kind="outlet" name="loadingActivity" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="onAirBottom" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="onAirBottomConstraint" candidateClass="NSLayoutConstraint"/>
+                <relationship kind="outlet" name="onAirTop" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="onAirTopConstraint" candidateClass="NSLayoutConstraint"/>
+                <relationship kind="outlet" name="optionsButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="playButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="shoutboxConstraint" candidateClass="NSLayoutConstraint"/>
+                <relationship kind="outlet" name="shoutboxPlayButtonConstraint" candidateClass="NSLayoutConstraint"/>
+            </relationships>
+        </class>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="NotificationNavigationController" superclassName="UINavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NotificationNavigationController.h"/>
+        </class>
+        <class className="NotificationsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NotificationsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="deleteAll:"/>
+                <relationship kind="action" name="doneButton:"/>
+                <relationship kind="outlet" name="bar" candidateClass="UINavigationItem"/>
+            </relationships>
+        </class>
+        <class className="OptionsMenuViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/OptionsMenuViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="container" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="OptionsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/OptionsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="switchFlicked:" candidateClass="UISwitch"/>
+                <relationship kind="outlet" name="descriptionBox" candidateClass="UITextView"/>
+                <relationship kind="outlet" name="highQualitySwitch" candidateClass="UISwitch"/>
+                <relationship kind="outlet" name="loadingWebcam" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="manageNotifications" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="manageNotificationsLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="notoficationsSwitch" candidateClass="UISwitch"/>
+                <relationship kind="outlet" name="webcam" candidateClass="UIImageView"/>
+            </relationships>
+        </class>
+        <class className="ScheduleNavigationController" superclassName="UINavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ScheduleNavigationController.h"/>
+        </class>
+        <class className="ScheduleViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ScheduleViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="backButtonPressed:"/>
+            </relationships>
+        </class>
+        <class className="ShoutboxViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ShoutboxViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="codeUpdate:"/>
+                <relationship kind="action" name="hideKeyboardSwipe:"/>
+                <relationship kind="action" name="pushShout:"/>
+                <relationship kind="action" name="shout:"/>
+                <relationship kind="outlet" name="backgorundView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="charCounter" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="codeIs" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="codeShould" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="message" candidateClass="UITextView"/>
+                <relationship kind="outlet" name="shoutButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="slider" candidateClass="UISlider"/>
+                <relationship kind="outlet" name="userName" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="ShowViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ShowViewController.h"/>
+        </class>
+        <class className="ViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ViewController.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+// This object sends messages to the studio for communication over the "shoutbox"
 @interface Shoutbox : NSObject
 
 - (BOOL)shoutMessage:(NSString *)message byUser:(NSString *)user WithCode:(NSInteger)code;

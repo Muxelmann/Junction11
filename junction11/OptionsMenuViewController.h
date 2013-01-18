@@ -10,6 +10,7 @@
 #import "OptionsViewController.h"
 #import "MainViewController.h"
 
+// Just another main view to contain the options view so that it is easily embedded in iPad
 @interface OptionsMenuViewController : UIViewController
 
 @property (nonatomic, assign) id<OptionViewDelegate, MainViewDelegate, ManageNotificationsDelegate, ScheduleDataSource> delegate;

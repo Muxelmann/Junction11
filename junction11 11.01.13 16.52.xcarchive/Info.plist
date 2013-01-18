@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AppStoreFileSize</key>
+	<integer>1407008</integer>
+	<key>AppStoreFileSizeValid</key>
+	<true/>
+	<key>ApplicationProperties</key>
+	<dict>
+		<key>ApplicationPath</key>
+		<string>Applications/junction11.app</string>
+		<key>CFBundleIdentifier</key>
+		<string>com.maximilian.zangs.junction11</string>
+		<key>CFBundleShortVersionString</key>
+		<string>2.0</string>
+		<key>CFBundleVersion</key>
+		<string>2</string>
+		<key>IconPaths</key>
+		<array>
+			<string>Applications/junction11.app/icon_114.png</string>
+			<string>Applications/junction11.app/icon_57.png</string>
+			<string>Applications/junction11.app/icon_72.png</string>
+			<string>Applications/junction11.app/icon_144.png</string>
+		</array>
+		<key>SigningIdentity</key>
+		<string>iPhone Distribution: Maximilian Zangs</string>
+	</dict>
+	<key>ArchiveVersion</key>
+	<integer>2</integer>
+	<key>CreationDate</key>
+	<date>2013-01-11T16:52:12Z</date>
+	<key>Name</key>
+	<string>junction11</string>
+	<key>SchemeName</key>
+	<string>junction11</string>
+	<key>Status</key>
+	<string>Passed Validation</string>
+</dict>
+</plist>

@@ -105,7 +105,7 @@
     self.onAirTop.textAlignment = NSTextAlignmentLeft;
     self.onAirTop.font = [UIFont systemFontOfSize:14];
     self.onAirTop.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
-    self.onAirTop.text = @"Current Show";
+    self.onAirTop.text = @"Next show";
     
     self.onAirBottom.textAlignment = NSTextAlignmentCenter;
     self.onAirBottom.font = [UIFont boldSystemFontOfSize:15];

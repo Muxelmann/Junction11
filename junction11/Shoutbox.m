@@ -8,8 +8,7 @@
 
 #import "Shoutbox.h"
 
-#define URL @"http://gerfficient.com/app/mail.php"
-#define JUNCTION_11_URL @""
+#define JUNCTION_11_URL @"http://junction11.rusu.co.uk/customscripts/email.php"
 
 @interface Shoutbox ()
 @property NSInteger code;
@@ -40,9 +39,10 @@
 - (BOOL)shoutMessage:(NSString *)message byUser:(NSString *)user WithCode:(NSInteger)code
 {
     if (code == self.code) {
-        user = [user stringByAppendingFormat:@"via iOS version [%@] device [%@]", UIDevice.currentDevice.systemVersion, UIDevice.currentDevice.name];
+        // Removing any ' so that the webserver isn't confused
+        user = [user stringByReplacingOccurrencesOfString:@"'" withString:@"-"];
         
-        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:URL]];
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:JUNCTION_11_URL]];
         request.HTTPMethod = @"POST";
         
         NSString *values = [NSString stringWithFormat:@"person_name=%@&message=%@", user, message];

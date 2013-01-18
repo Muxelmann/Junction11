@@ -12,6 +12,7 @@
 @protocol ManageNotificationsDelegate;
 @protocol NotidicationButtonDelegate;
 
+// The table containing all notifications entered.
 @interface NotificationsViewController : UITableViewController
 
 @property (assign, nonatomic) id<ManageNotificationsDelegate> delegate;

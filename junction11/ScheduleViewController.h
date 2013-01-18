@@ -10,6 +10,7 @@
 #import "ShowViewController.h"
 #import "ScheduleDataSource.h"
 
+// The list of all shows
 @interface ScheduleViewController : UITableViewController <ShowDataSource>
 
 @property (nonatomic, assign) id<ShowViewDelegate, ShowSchedulingDelegate> delegate;

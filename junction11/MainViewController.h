@@ -13,6 +13,8 @@
 
 @protocol MainViewDelegate;
 
+// This view controller displays the main play/pause button and
+// implements the stream object
 @interface MainViewController : UIViewController <WebPlayerDelegate, ShoutboxDelegate>
 
 @property (nonatomic, assign) id<ShowViewDelegate, MainViewDelegate, ShowSchedulingDelegate> delegate;

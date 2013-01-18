@@ -11,6 +11,8 @@
 
 @protocol ShoutboxDelegate;
 
+// By swiping down on the main view controller, this one appears
+// Here the user can communicate with the studio
 @interface ShoutboxViewController : UIViewController
 
 @property (nonatomic, assign) id<ShoutboxDelegate> delegate;

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ScheduleViewController.h"
 
+// The schedule navigation controller to move between the list and a specific show
 @interface ScheduleNavigationController : UINavigationController
 
 @property (assign, nonatomic) id<ShowViewDelegate, ShowSchedulingDelegate>scheduleDelegate;

@@ -340,43 +340,25 @@
     
     return [self.gregorian dateByAddingComponents:differenceToNotification toDate:start options:0];
     
-    
-//    NSDate *now = [NSDate date];
-//    NSDateComponents *comp = [[NSDateComponents alloc] init];
-//    comp.minute = 1;
-//    NSDate *test = [self.gregorian dateByAddingComponents:comp toDate:now options:0];
-//    
-//    return test;
 }
 
 - (NSString *)currentShow
 {
     if ([self.schedule count] == 0) [self update];
     
+    NSDate *now = [NSDate date];
+
     for (int d = 0; d < 7; d ++) {
-        for (int s = 0; s < [self numberOfShowsPerDay:d]; d++) {
-            NSDate *time = [self startingTimeOfShow:s onDay:d];
-            NSDate *now = [NSDate date];
+        for (int s = 0; s < [self numberOfShowsPerDay:d]; s++) {
+            NSDate *start = [self startingTimeOfShow:s onDay:d];
+            NSDate *finish = [self endingTimeOfShow:s onDay:d];
             
-            unsigned int flags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit;
-            
-            NSDateComponents* timeC = [self.gregorian components:flags fromDate:time];
-            NSDateComponents* nowC = [self.gregorian components:flags fromDate:now];
-            
-//            NSLog(@"D %i = %i", timeC.weekday, nowC.weekday);
-            if (timeC.weekday == nowC.weekday) { // Day is identical
-//                NSLog(@"h %i <= %i", timeC.hour, nowC.hour);
-                if (timeC.hour <= nowC.hour) { // Show is same hour or earlier
-//                    NSLog(@"m %i <= %i", timeC.minute, nowC.minute);
-                    if (timeC.minute <= nowC.minute) {
-                        return [self titleForShow:s onDay:d];
-                    }
-                }
+            if ([start compare:now] == NSOrderedAscending && [now compare:finish] == NSOrderedAscending) {
+                return [self titleForShow:s onDay:d];
             }
         }
     }
-    
-//    NSLog(@"NO show found... %i", [self.schedule count]);
+
     return @"Don't know what's playing...";
 }
 
@@ -384,37 +366,25 @@
 {
     if ([self.schedule count] == 0) [self update];
     
+    NSDate *now = [NSDate date];
+    
     for (int d = 0; d < 7; d ++) {
-        for (int s = 0; s < [self numberOfShowsPerDay:d]; d++) {
-            NSDate *time = [self startingTimeOfShow:s onDay:d];
-            NSDate *now = [NSDate date];
+        for (int s = 0; s < [self numberOfShowsPerDay:d]; s++) {
+            NSDate *start = [self startingTimeOfShow:s onDay:d];
+            NSDate *finish = [self endingTimeOfShow:s onDay:d];
             
-            unsigned int flags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSWeekdayCalendarUnit;
-            
-            NSDateComponents* timeC = [self.gregorian components:flags fromDate:time];
-            NSDateComponents* nowC = [self.gregorian components:flags fromDate:now];
-            
-//            NSLog(@"D %i = %i", timeC.weekday, nowC.weekday);
-            if (timeC.weekday == nowC.weekday) {
-                // Day is identical
-//                NSLog(@"h %i <= %i", timeC.hour, nowC.hour);
-                if (timeC.hour <= nowC.hour) {
-                    // Show is same hour or earlier
-//                    NSLog(@"m %i <= %i", timeC.minute, nowC.minute);
-                    if (timeC.minute <= nowC.minute) {
-                        s++;
-                        if (s == [self numberOfShowsPerDay:d]-1) {
-                            // Last show of the day, add 1 to day and reset show ot 0
-                            d++;
-                            s = 0;
-                            if (d >= 7) {
-                                // Last show of week, reset day to 0
-                                d = 0;
-                            }
-                        }
-                        return [self titleForShow:s onDay:d];
+            if ([start compare:now] == NSOrderedAscending && [now compare:finish] == NSOrderedAscending) {
+                s++;
+                if (s == [self numberOfShowsPerDay:d]-1) {
+                    // Last show of the day, add 1 to day and reset show ot 0
+                    d++;
+                    s = 0;
+                    if (d >= 7) {
+                        // Last show of week, reset day to 0
+                        d = 0;
                     }
                 }
+                return [self titleForShow:s onDay:d];
             }
         }
     }

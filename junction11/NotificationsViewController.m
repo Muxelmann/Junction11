@@ -185,7 +185,14 @@
     }
     
     [self.button updateNotificationButton];
-    [self doneButton:NULL];
+    if ([self.parentViewController isKindOfClass:[NotificationNavigationController class]]) {
+        NotificationNavigationController *navigationController = (NotificationNavigationController *)self.parentViewController;
+        if ([UIDevice.currentDevice userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+            [navigationController.popover dismissPopoverAnimated:YES];
+        else {
+            [self doneButton:NULL];
+        }
+    }
 }
 
 - (IBAction)doneButton:(id)sender
