@@ -54,7 +54,6 @@
     
     // Setup view
     self.backgorundView.backgroundColor = [UIColor clearColor];
-//    self.view.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.5 alpha:0.5];
     self.view.backgroundColor = [UIColor clearColor];
     self.slider.continuous = YES;
     self.slider.minimumValue = 0;
@@ -65,6 +64,7 @@
     self.userName.placeholder = UIDevice.currentDevice.name;
     
     self.message.text = @"";
+    self.message.textColor = [UIColor blackColor];
     self.charCounter.text = [NSString stringWithFormat:@"%i", MAX_CHARACTERS_IN_MESSAGE];
 
     self.codeShould.textColor = [UIColor whiteColor];
@@ -146,6 +146,9 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
+    // This fixes the invisible text bug...
+    textView.frame = textView.frame;
+    
     if ([text isEqualToString:@"\n"]) {
         [textView resignFirstResponder];
     } else if (textView.text.length - range.length + text.length <= MAX_CHARACTERS_IN_MESSAGE) {

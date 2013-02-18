@@ -17,7 +17,7 @@
 + (void)makeCellButtonGreen:(UITableViewCell *)cell;
 + (void)makeCellButtonWhite:(UITableViewCell *)cell;
 
-+ (void)applyOverlaytoView:(UIView *)view;
+//+ (void)applyOverlaytoView:(UIView *)view;
 + (void)makeOverlayWithColor:(UIColor *)color toView:(UIView *)view;
 + (void)makeHollowView:(UIView *)view;
 

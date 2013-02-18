@@ -233,7 +233,9 @@
                 self.shoutboxConstraint.constant = 44;
                 self.shoutboxPlayButtonConstraint.constant = 20;
                 self.onAirTopConstraint.constant = 20;
+                
                 self.infoImageConstraint.constant = -self.infoImage.bounds.size.height;
+                
                 [self.view layoutIfNeeded];
             }];
         } else {
@@ -241,7 +243,7 @@
                 self.shoutboxConstraint.constant = 44;
                 self.shoutboxPlayButtonConstraint.constant = 90;
                 self.onAirTopConstraint.constant = 50;
-                NSLog(@"OR %i ", UIInterfaceOrientationIsLandscape(UIDevice.currentDevice.orientation));
+                
                 if (UIInterfaceOrientationIsLandscape(UIDevice.currentDevice.orientation))
                     self.infoImageConstraint.constant = -self.infoImage.bounds.size.height;
                 

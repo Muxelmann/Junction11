@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2844" systemVersion="12C60" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12C60" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="2">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1930"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -685,6 +685,9 @@
                             </view>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="scaleToFill" restorationIdentifier="shoutboxMessageID" translatesAutoresizingMaskIntoConstraints="NO" id="FWB-2j-gWc">
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="106" id="phu-vo-D0b"/>
+                                </constraints>
                                 <string key="text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -752,16 +755,15 @@
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="Kw7-0V-y9Z" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="9Q6-Hi-bbi"/>
                             <constraint firstAttribute="trailing" secondItem="4M3-3h-Lwn" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="AmT-Sj-XH5"/>
-                            <constraint firstItem="Tq8-IG-rhZ" firstAttribute="top" secondItem="FWB-2j-gWc" secondAttribute="bottom" constant="20" type="user" id="BkN-dN-fvg"/>
+                            <constraint firstItem="vs1-JR-qfW" firstAttribute="top" secondItem="z8C-oL-U7y" secondAttribute="top" constant="20" symbolic="YES" type="default" id="FAx-ei-LPc"/>
                             <constraint firstItem="xgs-bd-QwT" firstAttribute="top" secondItem="z8C-oL-U7y" secondAttribute="top" type="default" id="FBl-W8-dnv"/>
                             <constraint firstAttribute="trailing" secondItem="FWB-2j-gWc" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="FSR-nd-r1d"/>
                             <constraint firstAttribute="trailing" secondItem="1MC-YF-cf6" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="LPd-AH-qb7"/>
                             <constraint firstAttribute="bottom" secondItem="Tq8-IG-rhZ" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="Mh9-N4-QrQ"/>
                             <constraint firstItem="FWB-2j-gWc" firstAttribute="leading" secondItem="z8C-oL-U7y" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="R2N-qu-g8w"/>
                             <constraint firstItem="oPg-0b-2Jq" firstAttribute="baseline" secondItem="vs1-JR-qfW" secondAttribute="baseline" type="default" id="SL5-RP-301"/>
-                            <constraint firstItem="vs1-JR-qfW" firstAttribute="top" secondItem="z8C-oL-U7y" secondAttribute="top" constant="20" type="user" id="Sfy-PU-kX9"/>
-                            <constraint firstItem="oPg-0b-2Jq" firstAttribute="top" secondItem="z8C-oL-U7y" secondAttribute="top" constant="20" type="user" id="UTU-WI-QDf"/>
-                            <constraint firstItem="FWB-2j-gWc" firstAttribute="top" secondItem="oPg-0b-2Jq" secondAttribute="bottom" constant="20" type="user" id="bCD-BX-Jl8"/>
+                            <constraint firstItem="FWB-2j-gWc" firstAttribute="top" secondItem="z8C-oL-U7y" secondAttribute="top" constant="70" id="b6K-dG-63b"/>
+                            <constraint firstItem="oPg-0b-2Jq" firstAttribute="top" secondItem="z8C-oL-U7y" secondAttribute="top" constant="20" symbolic="YES" type="default" id="bGZ-Jr-Qnw"/>
                             <constraint firstItem="xgs-bd-QwT" firstAttribute="leading" secondItem="z8C-oL-U7y" secondAttribute="leading" type="default" id="bJX-In-Jdh"/>
                             <constraint firstItem="oPg-0b-2Jq" firstAttribute="leading" secondItem="z8C-oL-U7y" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="eSl-Ax-FoD"/>
                             <constraint firstItem="xgs-bd-QwT" firstAttribute="trailing" secondItem="z8C-oL-U7y" secondAttribute="trailing" type="default" id="iGM-Oz-3rS"/>

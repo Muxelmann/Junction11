@@ -51,7 +51,6 @@
 //    if ([UIDevice.currentDevice userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         rect = self.view.frame;
         rect.origin = CGPointMake(0, 0);
-        rect.size.height += 20;
         self.view.frame = rect;
 //    }
     
